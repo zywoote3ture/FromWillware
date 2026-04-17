@@ -22,7 +22,7 @@ public class WeaponBackPack : BackPack
 
     public void WeaponAdd(Weapon weapon)
     {
-        if (CurrentCount == MaxSize)
+        if (CurrentCount == MaxCount)
         {
             Debug.Log("The Weapon BackPack is Full");
             return;

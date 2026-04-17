@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackPack : MonoBehaviour
+public class ItemPickup : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public int MaxCount;
-    public int CurrentCount;
-    public int CurrentIndex;
+    public Item ItemData;
     
+    // Start is called before the first frame update
     void Start()
     {
         

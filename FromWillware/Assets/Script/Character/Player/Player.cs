@@ -80,4 +80,9 @@ public class Player : Character
         // var camFollow = Camera.main.GetComponent<CameraFollow>();
         // if (camFollow != null) camFollow.enabled = false;
     }
+    
+    public void PlayDrinkAnim()
+    {
+        animator.SetTrigger("Drink");
+    }
 }
