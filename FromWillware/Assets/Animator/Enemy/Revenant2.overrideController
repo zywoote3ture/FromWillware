@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Revenant2
+  m_Controller: {fileID: 9100000, guid: 411fd3925cf1afa488f7acd4603f28ba, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 7e528e6c62b92f243b21f07b3e647f49, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 3ffd3b4b702aa7f4a8affbec3cffd16f, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 7cfddc5ce84911546979ef3516cb6d9d, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 7cfddc5ce84911546979ef3516cb6d9d, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 87792eace2eb19d4a9ffec92b310dadc, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 87792eace2eb19d4a9ffec92b310dadc, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 1fd5f1a15661df74f82f894595c14c04, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 395e430cb87a7554eb6364da0f86e5ee, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 7055bcd6f38530949a7191eb27ba3777, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 3442559fa93e67544bd68d2f08f7431f, type: 3}

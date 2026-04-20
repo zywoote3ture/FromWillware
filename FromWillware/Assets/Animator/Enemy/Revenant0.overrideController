@@ -6,16 +6,16 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Revenant_Override
+  m_Name: Revenant0
   m_Controller: {fileID: 9100000, guid: 411fd3925cf1afa488f7acd4603f28ba, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: -203655887218126122, guid: 1fd5f1a15661df74f82f894595c14c04, type: 3}
     m_OverrideClip: {fileID: -203655887218126122, guid: 1fd5f1a15661df74f82f894595c14c04, type: 3}
-  - m_OriginalClip: {fileID: -203655887218126122, guid: 2d87cfd26e6f827448f57d39f2ba47e1, type: 3}
-    m_OverrideClip: {fileID: -203655887218126122, guid: 2d87cfd26e6f827448f57d39f2ba47e1, type: 3}
   - m_OriginalClip: {fileID: -203655887218126122, guid: 87792eace2eb19d4a9ffec92b310dadc, type: 3}
     m_OverrideClip: {fileID: -203655887218126122, guid: 87792eace2eb19d4a9ffec92b310dadc, type: 3}
   - m_OriginalClip: {fileID: -203655887218126122, guid: 7cfddc5ce84911546979ef3516cb6d9d, type: 3}
     m_OverrideClip: {fileID: -203655887218126122, guid: 7cfddc5ce84911546979ef3516cb6d9d, type: 3}
   - m_OriginalClip: {fileID: -203655887218126122, guid: 7e528e6c62b92f243b21f07b3e647f49, type: 3}
     m_OverrideClip: {fileID: -203655887218126122, guid: 7e528e6c62b92f243b21f07b3e647f49, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 7055bcd6f38530949a7191eb27ba3777, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 7055bcd6f38530949a7191eb27ba3777, type: 3}
