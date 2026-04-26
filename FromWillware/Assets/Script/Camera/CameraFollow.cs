@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -24,8 +25,8 @@ public class CameraFollow : MonoBehaviour
     [Header("LockOn Settings")]
     public Transform CurrentTarget;
     public float LockRotationSpeed = 5f;
-    
-    
+
+    private bool isResetting = false;
     void Start()
     {
         // 隐藏鼠标并锁定光标
@@ -35,7 +36,8 @@ public class CameraFollow : MonoBehaviour
 
     void Update()
     {
-
+        //if (isResetting) return;
+        
         if (!IsLockOn())
         {
             float mouseX = Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime;
@@ -45,11 +47,16 @@ public class CameraFollow : MonoBehaviour
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -30f, 60f);
         }
-       
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            StartCoroutine(SmoothReset());
+        }
     }
 
     void LateUpdate()
     {
+        //if (isResetting) return;
+         
        if(IsLockOn())
             LockOnUpdate();
        else
@@ -112,5 +119,52 @@ public class CameraFollow : MonoBehaviour
 
         Vector3 finalPos = playerPos + direction.normalized * adjustedDistance;
         transform.position = finalPos;
+    }
+    
+    public IEnumerator SmoothReset()
+    {
+        isResetting = true;
+
+        float t = 0;
+        float duration = 0.5f; // 慢一点更自然
+
+        float startX = xRotation;
+        float startY = yRotation;
+
+        Vector3 forward = PlayerTransform.forward;
+        float targetY = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+        float targetX = 20f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+
+            float lerpT = t / duration;
+            lerpT = Mathf.SmoothStep(0, 1, lerpT);
+
+            // ⭐ 关键：用 LerpAngle！
+            xRotation = Mathf.Lerp(startX, targetX, lerpT);
+            yRotation = Mathf.LerpAngle(startY, targetY, lerpT);
+
+            yield return null;
+        }
+
+        xRotation = targetX;
+        yRotation = targetY;
+
+        isResetting = false;
+    }
+    
+    public void SyncRotationFromCamera()
+    {
+        Vector3 euler = transform.eulerAngles;
+
+        float x = euler.x;
+        float y = euler.y;
+
+        if (x > 180f) x -= 360f;
+
+        xRotation = Mathf.Clamp(x, -30f, 60f);
+        yRotation = y;
     }
 }

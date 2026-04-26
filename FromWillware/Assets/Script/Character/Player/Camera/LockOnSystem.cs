@@ -24,9 +24,15 @@ public class LockOnSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             if (cameraFollow.CurrentTarget == null)
+            {
                 FindTarget();
+            }
+
             else
+            {
                 ClearTarget();
+            }
+                
         }
 
         if (cameraFollow.CurrentTarget != null)
@@ -58,6 +64,8 @@ public class LockOnSystem : MonoBehaviour
     void ClearTarget()
     {
         cameraFollow.CurrentTarget = null;
+        // ⭐ 核心：把当前相机角度写回自由视角系统
+        cameraFollow.SyncRotationFromCamera();
         targets.Clear();
     }
 }

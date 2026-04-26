@@ -6,6 +6,8 @@ public class Damage : MonoBehaviour
 {
     // Start is called before the first frame update
     public int damage;
+
+    
     void Start()
     {
         
@@ -16,4 +18,6 @@ public class Damage : MonoBehaviour
     {
         
     }
+    
+    
 }
