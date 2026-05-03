@@ -13,7 +13,8 @@ public class PlayerAttack : MonoBehaviour
     private WeaponSystem weaponSystem;
     private Transform currentWeapon;
     private Collider currentWeaponCollider;
-    
+    private GetHit hitState;
+    private PlayerState playerState;
     
     private bool canCombo = false;
     private bool inputBuffered = false;
@@ -31,6 +32,8 @@ public class PlayerAttack : MonoBehaviour
         player = GetComponent<Player>();
         playerParry = GetComponent<PlayerParry>();
         weaponSystem = GetComponent<WeaponSystem>();
+        hitState = GetComponent<GetHit>();
+        playerState = GetComponent<PlayerState>();
     }
 
     // Update is called once per frame
@@ -39,11 +42,12 @@ public class PlayerAttack : MonoBehaviour
         currentWeapon = weaponSystem.CurrentWeapon;
         currentWeaponCollider = currentWeapon.GetComponentInChildren<Collider>();
         Attack();
+        FixIsAttacking();
     }
 
     void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.J)&&!playerMove.IsRolling&&!player.StaminaEmpty&&!playerParry.IsDefensing)
+        if (Input.GetKeyDown(KeyCode.J)&&playerState.CanAttack)
         {
            
             if (IsAttacking)
@@ -60,6 +64,7 @@ public class PlayerAttack : MonoBehaviour
 
     void StartAttack()
     {
+        if (IsAttacking) return;
         var weapon = currentWeapon.GetComponent<Weapon>();
     
         animator.SetFloat("AttackSpeed", weapon.AttackSpeed);
@@ -139,5 +144,33 @@ public class PlayerAttack : MonoBehaviour
     {
         
         currentWeaponCollider.enabled = false;
+    }
+    
+    [SerializeField]
+    private bool hasEnteredAttack = false;
+
+    public void FixIsAttacking()
+    {
+        if (animator.IsInTransition(0)) return;
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        bool isAttackState =
+            stateInfo.IsName("Combo1") ||
+            stateInfo.IsName("Combo2") ||
+            stateInfo.IsName("Combo3");
+
+        // ✅ 标记：已经进入攻击动画
+        if (isAttackState)
+        {
+            hasEnteredAttack = true;
+        }
+
+        // ✅ 只有真正进入过攻击，才允许退出
+        if (hasEnteredAttack && !isAttackState)
+        {
+            IsAttacking = false;
+            hasEnteredAttack = false;
+        }
     }
 }

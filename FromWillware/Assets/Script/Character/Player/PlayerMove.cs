@@ -20,6 +20,8 @@ public class PlayerMove : MonoBehaviour
     private Vector2 inputDir;
     private Player player;
     private PlayerParry playerParry;
+    private GetHit hitState;
+    private PlayerState playerState;
     
     // Start is called before the first frame update
     void Start()
@@ -29,12 +31,14 @@ public class PlayerMove : MonoBehaviour
         NextRolling = true;
         rb = GetComponent<Rigidbody>();
         playerParry = GetComponent<PlayerParry>();
+        hitState = GetComponent<GetHit>();
+        playerState = GetComponent<PlayerState>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!IsRolling && !playerAttack.IsAttacking && !playerParry.IsDefensing)
+        if (playerState.CanMove)
         {
             inputDir.x = Input.GetAxis("Horizontal");
             inputDir.y = Input.GetAxis("Vertical");

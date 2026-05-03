@@ -21,7 +21,7 @@ public class Weapon : MonoBehaviour
         {
             Debug.Log(gameObject.name + " has no damage");
         }
-        WeaponDamage = damage.damage;
+        //WeaponDamage = damage.damage;
         weaponCollider =  GetComponentInChildren<Collider>();
     }
 

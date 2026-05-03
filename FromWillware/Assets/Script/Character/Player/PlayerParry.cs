@@ -10,11 +10,14 @@ public class PlayerParry : MonoBehaviour
     
     [SerializeField]
     private Animator animator;
-    
+    private GetHit hitState;
+    private PlayerState playerState;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        hitState = GetComponent<GetHit>();
+        playerState = GetComponent<PlayerState>();
     }
 
     // Update is called once per frame
@@ -25,6 +28,8 @@ public class PlayerParry : MonoBehaviour
 
     public void Defense()
     {
+        if (!playerState.CanParry) return;
+        
         if (Input.GetKeyDown(KeyCode.K))
         {
             animator.SetBool("IsDefensing", true);

@@ -11,10 +11,12 @@ public class ConsumableBackPack : BackPack,ISaveable
     private ItemPickup nearbyItem;
     private ItemBar itemBar;
     private ItemPickup itemPickup;
+    private Animator animator;
     
     void Start()
     {
         itemBar = GetComponent<ItemBar>();
+        animator = GetComponent<Animator>();
         //Items = new List<ItemStack>(new ItemStack[MaxSize]);
     }
 
@@ -43,22 +45,21 @@ public class ConsumableBackPack : BackPack,ISaveable
         {
             if (AddItem(nearbyItem.ItemData))
             {
-                Destroy(nearbyItem.gameObject); // 拾取后消失
+                animator.SetTrigger("Pickup");
+                StartCoroutine(DestroyAfterDelay(nearbyItem.gameObject, 0.5f));
                 nearbyItem = null;
             }
                
            
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            AddToItemBar(0,0);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            RemoveFromItemBar(0);
-        }
+       
+    }
+    
+    IEnumerator DestroyAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(obj);
     }
     
     public bool AddItem(Item item)
@@ -180,12 +181,20 @@ public class ConsumableBackPack : BackPack,ISaveable
 
         foreach (var stack in Items)
         {
-            data.Add(new ItemStackData
+            if (stack == null || stack.item == null ||  string.IsNullOrEmpty(stack.item.Name))  // ⭐关键修复
             {
-                itemName = stack.item.Name,
-                count = stack.CurrentCount,
-                barIndex = stack.BarIndex
-            });
+                continue;
+            }
+            else
+            {
+                data.Add(new ItemStackData
+                {
+                    itemName = stack.item.Name,
+                    count = stack.CurrentCount,
+                    barIndex = stack.BarIndex
+                });
+            }
+            
         }
 
         return JsonUtility.ToJson(new Wrapper { items = data });
@@ -201,6 +210,18 @@ public class ConsumableBackPack : BackPack,ISaveable
         for (int i = 0; i < wrapper.items.Count; i++)
         {
             var d = wrapper.items[i];
+            if (string.IsNullOrEmpty(d.itemName))
+            {
+                Debug.Log("❌ 读取到空 itemName，跳过");
+                continue;
+            }
+
+            if (!ItemDatabase.dict.ContainsKey(d.itemName))
+            {
+                Debug.Log("❌ 数据库不存在该物品: " + d.itemName);
+                continue;
+            }
+
 
             // ❗跳过空格（不存null）
             if (d == null) continue;

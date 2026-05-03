@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Character
+public class Player : Character,ISaveable
 {
     public float MaxStamina;
     public float CurrentStamina;
@@ -11,6 +11,7 @@ public class Player : Character
     
 
     private Animator animator;
+    private PlayerState playerState;
    
     // Start is called before the first frame update
     void Start()
@@ -18,7 +19,7 @@ public class Player : Character
         CurrentHP = MaxHP;
         CurrentStamina = MaxStamina;
         animator = GetComponent<Animator>();
-     
+        playerState = GetComponent<PlayerState>();
     }
 
     // Update is called once per frame
@@ -42,6 +43,7 @@ public class Player : Character
 
     void RecoverStamina()
     {
+        if (!playerState.CanRecoverStamina) return;
         if (CurrentStamina <= MaxStamina)
         {
             CurrentStamina += StaminaRecoverRate * Time.deltaTime;
@@ -84,5 +86,29 @@ public class Player : Character
     public void PlayDrinkAnim()
     {
         animator.SetTrigger("Drink");
+    }
+    
+    public string GetUniqueID()
+    {
+        return "Player";
+    }
+
+    public string CaptureState()
+    {
+        PlayerData data = new PlayerData()
+        {
+            MaxHP = this.MaxHP,
+            MaxStamina = this.MaxStamina
+        };
+        return JsonUtility.ToJson(data);
+    }
+
+    public void RestoreState(string state)
+    {
+        PlayerData data = JsonUtility.FromJson<PlayerData>(state);
+        MaxHP = data.MaxHP;
+        MaxStamina = data.MaxStamina;
+        CurrentHP = data.MaxHP;
+        CurrentStamina = data.MaxStamina;
     }
 }
