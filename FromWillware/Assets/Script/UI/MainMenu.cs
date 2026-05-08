@@ -21,52 +21,44 @@ public class MainMenu : MonoBehaviour
 
     // 1. 新的游戏
     public void NewGame()
+{
+    PlayClickSFX();
+    
+    // 存入要加载的场景路径
+    PlayerPrefs.SetString("TargetScene", "Scenes/SampleScene/MainScene");
+    PlayerPrefs.SetInt("UseIndex", 0); // 0 代表用字符串名，1 代表用索引
+
+    SceneManager.LoadScene("Scenes/Loading");
+}
+
+// 在 MainMenu.cs 中
+public void ContinueGame()
+{
+    PlayClickSFX();
+
+    string savePath = SaveSystem.GetSavePath("save.json");
+    bool hasJsonSave = File.Exists(savePath);
+    int savedSceneIndex = PlayerPrefs.GetInt("SavedSceneIndex", 0);
+
+    if (hasJsonSave && savedSceneIndex != 0)
     {
-        PlayClickSFX();
+        Debug.Log("准备加载存档，索引：" + savedSceneIndex);
         
-        // 如果是新游戏，我们不需要读取旧存档
-        SaveSystem.shouldLoadSaveGame = false;
+        // 【关键逻辑】：
+        // 1. 存入要加载的索引
+        PlayerPrefs.SetInt("TargetIndex", savedSceneIndex);
+        // 2. 标记使用索引加载 (1 代表使用索引)
+        PlayerPrefs.SetInt("UseIndex", 1); 
+        // 3. 告诉你的存档系统在下一场景加载时去读取文件
+        SaveSystem.shouldLoadSaveGame = true; 
 
-        // 可选：删除旧的存档文件，防止新游戏被旧数据污染
-        string savePath = SaveSystem.GetSavePath("save.json");
-        if (File.Exists(savePath))
-        {
-            File.Delete(savePath);
-        }
-        PlayerPrefs.DeleteKey("SavedSceneIndex");
-
-        // 按场景名加载
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("Scenes/Loading");
     }
-
-    // 2. 继续游戏 (修改后)
-    public void ContinueGame()
+    else
     {
-        PlayClickSFX();
-
-        // 检查 json 存档文件是否存在
-        string savePath = SaveSystem.GetSavePath("save.json");
-        bool hasJsonSave = File.Exists(savePath);
-
-        // 获取记录的场景索引
-        int savedSceneIndex = PlayerPrefs.GetInt("SavedSceneIndex", 0);
-
-        if (hasJsonSave && savedSceneIndex != 0)
-        {
-            Debug.Log("正在加载存档，关卡索引：" + savedSceneIndex);
-            
-            // 【关键步骤】：告诉 SaveSystem，场景加载完毕后请执行 Load() 函数
-            SaveSystem.shouldLoadSaveGame = true; 
-            
-            // 加载游戏场景
-            SceneManager.LoadScene(savedSceneIndex);
-        }
-        else
-        {
-            Debug.Log("没有发现存档，请开始新游戏");
-            // 可以在这里弹出一个UI提示框告诉玩家没有存档
-        }
+        Debug.Log("没有发现存档或存档无效");
     }
+}
 
     // 3. 设置按钮
     public void OpenSettings()
