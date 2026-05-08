@@ -11,12 +11,18 @@ public class WeaponSystem : MonoBehaviour
     public Transform CurrentWeapon;
     public int MaxSzie = 2;
     
+    public Animator animator;
+    public AnimatorOverrideController baseOverride;
+
+    private AnimatorOverrideController runtimeOverride;
+    
     private Player player;
     
     // Start is called before the first frame update
     void Start()
     {
         Weapons = new List<Transform>(2);
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -51,6 +57,7 @@ public class WeaponSystem : MonoBehaviour
         CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Count;
 
         EquipWeapon(CurrentWeaponIndex);
+        ApplyWeaponAnimation(CurrentWeapon.GetComponent<WeaponPickup>().weaponData);
     }
     public void AddWeapon(WeaponData data)
     {
@@ -73,6 +80,22 @@ public class WeaponSystem : MonoBehaviour
         if (CurrentWeapon == null)
         {
             EquipWeapon(Weapons.Count - 1);
+            ApplyWeaponAnimation(Weapons[Weapons.Count - 1]
+                .GetComponent<WeaponPickup>().weaponData);
         }
+    }
+    
+    void ApplyWeaponAnimation(WeaponData weapon)
+    {
+        runtimeOverride = new AnimatorOverrideController(baseOverride);
+
+        runtimeOverride["SwordAttack1"] = weapon.combo1;
+        runtimeOverride["SwordAttack2"] = weapon.combo2;
+        runtimeOverride["SwordAttack3"] = weapon.combo3;
+        runtimeOverride["Sword And Shield Idle"] = weapon.idle;
+        runtimeOverride["Sword And Shield Run"] = weapon.run;
+        runtimeOverride["Walking"] = weapon.walk;
+        
+        animator.runtimeAnimatorController = runtimeOverride;
     }
 }

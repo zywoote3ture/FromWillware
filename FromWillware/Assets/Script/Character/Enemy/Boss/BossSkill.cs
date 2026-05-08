@@ -12,6 +12,9 @@ public abstract class BossSkill : MonoBehaviour
     [Header("实际攻击距离")]
     public float attackDistance = 5f;
 
+    [Header("角度修正")]
+    public float angleOffset = 0f; 
+
     [Header("霸体")]
     public bool isHyperArmor = false;
 

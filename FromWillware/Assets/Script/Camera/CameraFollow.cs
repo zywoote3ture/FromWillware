@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -27,11 +28,13 @@ public class CameraFollow : MonoBehaviour
     public float LockRotationSpeed = 5f;
 
     private bool isResetting = false;
+    private PlayerInputHandler inputHandler;
     void Start()
     {
         // 隐藏鼠标并锁定光标
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        inputHandler = PlayerTransform.GetComponent<PlayerInputHandler>();
     }
 
     void Update()
@@ -40,8 +43,14 @@ public class CameraFollow : MonoBehaviour
         
         if (!IsLockOn())
         {
-            float mouseX = Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * MouseSensitivity * Time.deltaTime;
+            Vector2 look = inputHandler.lookInput;
+
+            bool isGamepad = Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame;
+
+            float multiplier = isGamepad ? 1f : Time.deltaTime;
+            
+            float mouseX = look.x * MouseSensitivity * Time.deltaTime;
+            float mouseY = look.y * MouseSensitivity * Time.deltaTime;
 
             yRotation += mouseX;
             xRotation -= mouseY;

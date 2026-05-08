@@ -12,11 +12,12 @@ public class ConsumableBackPack : BackPack,ISaveable
     private ItemBar itemBar;
     private ItemPickup itemPickup;
     private Animator animator;
-    
+    private PlayerInputHandler inputHandler;
     void Start()
     {
         itemBar = GetComponent<ItemBar>();
         animator = GetComponent<Animator>();
+        inputHandler = GetComponent<PlayerInputHandler>();
         //Items = new List<ItemStack>(new ItemStack[MaxSize]);
     }
 
@@ -41,7 +42,7 @@ public class ConsumableBackPack : BackPack,ISaveable
 
     void Update()
     {
-        if (nearbyItem != null && Input.GetKeyDown(KeyCode.E))
+        if (nearbyItem != null && (Input.GetKeyDown(KeyCode.E)||inputHandler.interactPressed))
         {
             if (AddItem(nearbyItem.ItemData))
             {

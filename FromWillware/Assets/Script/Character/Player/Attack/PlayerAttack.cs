@@ -15,6 +15,7 @@ public class PlayerAttack : MonoBehaviour
     private Collider currentWeaponCollider;
     private GetHit hitState;
     private PlayerState playerState;
+    private PlayerInputHandler inputHandler;
     
     private bool canCombo = false;
     private bool inputBuffered = false;
@@ -34,6 +35,7 @@ public class PlayerAttack : MonoBehaviour
         weaponSystem = GetComponent<WeaponSystem>();
         hitState = GetComponent<GetHit>();
         playerState = GetComponent<PlayerState>();
+        inputHandler = GetComponent<PlayerInputHandler>();
     }
 
     // Update is called once per frame
@@ -65,7 +67,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.J)&&playerState.CanAttack)
+        if ((Input.GetKeyDown(KeyCode.J)||inputHandler.attackPressed)&&playerState.CanAttack)
         {
            
             if (IsAttacking)

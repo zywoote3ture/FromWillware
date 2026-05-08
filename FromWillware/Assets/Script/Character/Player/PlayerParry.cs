@@ -12,12 +12,15 @@ public class PlayerParry : MonoBehaviour
     private Animator animator;
     private GetHit hitState;
     private PlayerState playerState;
+
+    private PlayerInputHandler inputHandler;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         hitState = GetComponent<GetHit>();
         playerState = GetComponent<PlayerState>();
+        inputHandler = GetComponent<PlayerInputHandler>();
     }
 
     // Update is called once per frame
@@ -30,7 +33,7 @@ public class PlayerParry : MonoBehaviour
     {
         if (!playerState.CanParry) return;
         
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K)||inputHandler.parryPressed)
         {
             animator.SetBool("IsDefensing", true);
             IsDefensing = true;
@@ -38,7 +41,7 @@ public class PlayerParry : MonoBehaviour
             StartCoroutine(Parry());
         }
 
-        if (Input.GetKeyUp(KeyCode.K))
+        if (Input.GetKeyUp(KeyCode.K)||inputHandler.parryReleased)
         {
             animator.SetBool("IsDefensing", false);
             IsDefensing = false;

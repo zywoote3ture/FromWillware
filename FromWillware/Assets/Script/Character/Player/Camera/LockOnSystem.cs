@@ -10,18 +10,20 @@ public class LockOnSystem : MonoBehaviour
     
     private List<Transform> targets = new List<Transform>();
     private int index = 0;
+    private PlayerInputHandler inputHandler;
     
     // Start is called before the first frame update
     void Start()
     {
         cameraFollow =  FindObjectOfType<CameraFollow>();
         EnemyLayer = LayerMask.GetMask("Enemy");
+        inputHandler = FindObjectOfType<PlayerInputHandler>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L)||inputHandler.lockPressed)
         {
             if (cameraFollow.CurrentTarget == null)
             {

@@ -32,6 +32,16 @@ public class Boss : Character
     public float staggerThreshold = 100f;
     public float currentStagger = 0f;
 
+    [Header("音效参数")]
+    public AudioSource audioSource;
+    public AudioClip hitSound;      
+    public AudioClip breakSound;   
+    public AudioClip dashSound;     
+    public AudioClip deathSound;
+
+    [Header("经验参数")]
+    public int expReward = 500;
+
     [HideInInspector] public bool isExecutingSkill { get; private set; }
 
     private BossSkill currentActiveSkill;
@@ -48,6 +58,8 @@ public class Boss : Character
     private bool isInStagger = false;
     private float pushDistanceRemaining = 0f;
 
+    private Collider bodyCollider;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -60,6 +72,11 @@ public class Boss : Character
         agent.autoBraking = false;
         lastActionTime = Time.time;
         anim.applyRootMotion = false;
+
+        bodyCollider = GetComponent<Collider>();
+        if (bodyCollider != null) bodyCollider.isTrigger = false;
+
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
 
         skills = GetComponents<BossSkill>().ToList();
         foreach (var s in skills)
@@ -97,6 +114,7 @@ public class Boss : Character
         if (IsDead || CurrentHP <= 0) return;
         CurrentHP -= damageAmount;
         currentStagger += damageAmount;
+        if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
         if (CurrentHP <= 0) { Die(); return; }
 
         bool isHyper = isExecutingSkill && currentActiveSkill != null && currentActiveSkill.isHyperArmor;
@@ -139,7 +157,8 @@ public class Boss : Character
         // 3. 处理技能执行/前奏
         if (isExecutingSkill)
         {
-            FaceTarget(10f);
+            float offset = (currentActiveSkill != null) ? currentActiveSkill.angleOffset : 0f;
+            FaceTargetWithOffset(12f, offset);
             if (!anim.IsInTransition(0) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98f) OnSkillEnd();
             UpdateAnimator();
             return;
@@ -191,6 +210,8 @@ public class Boss : Character
         dashTimer = 0f;
         lastDashTime = Time.time;
 
+        if (bodyCollider != null) bodyCollider.isTrigger = true;
+
         // 目标点设在玩家身后 4 米
         Vector3 dirToPlayer = (playerTarget.position - transform.position).normalized;
         dashTargetPoint = playerTarget.position + dirToPlayer * 4.0f;
@@ -199,6 +220,7 @@ public class Boss : Character
         agent.ResetPath();
         gameObject.tag = "EnemyAttack";
         anim.SetBool("IsDashing", true);
+        if (audioSource && dashSound) audioSource.PlayOneShot(dashSound);
     }
 
     private void UpdateDashLogic()
@@ -224,6 +246,7 @@ public class Boss : Character
         anim.SetBool("IsDashing", false);
         agent.isStopped = false;
         lastActionTime = Time.time;
+        if (bodyCollider != null) bodyCollider.isTrigger = false;
     }
 
 
@@ -258,10 +281,12 @@ public class Boss : Character
         if (isDashing) EndDash();
         StartStaggerLogic(2f);
         anim.SetTrigger("DoHit");
+        if (audioSource && breakSound) audioSource.PlayOneShot(breakSound);
     }
 
     private void StartStaggerLogic(float pushDist)
     {
+        if (bodyCollider != null) bodyCollider.isTrigger = true;
         if (currentActiveSkill != null) currentActiveSkill.DisableWeapon();
         isExecutingSkill = false;
         currentActiveSkill = null;
@@ -278,6 +303,7 @@ public class Boss : Character
         isInStagger = false;
         pushDistanceRemaining = 0f;
         agent.isStopped = false;
+        if (bodyCollider != null) bodyCollider.isTrigger = false;
     }
 
     private void ExecuteSkill(BossSkill skill)
@@ -312,6 +338,17 @@ public class Boss : Character
         agent.isStopped = true;
         IsDead = true;
         anim.SetTrigger("DoDeath");
+        if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
+
+        if (playerTarget != null)
+        {
+            LevelSystem ls = playerTarget.GetComponent<LevelSystem>();
+            if (ls != null)
+            {
+                ls.exp += expReward;
+                ls.LevelUp();
+            }
+        }
     }
 
     void FaceTarget(float speed)
@@ -322,11 +359,36 @@ public class Boss : Character
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * speed);
     }
 
+    void FaceTargetWithOffset(float speed, float offsetAngle)
+    {
+        Vector3 dir = (playerTarget.position - transform.position);
+        dir.y = 0;
+        if (dir.sqrMagnitude < 0.01f) return;
+
+        Quaternion baseRotation = Quaternion.LookRotation(dir);
+        Quaternion offsetRotation = Quaternion.Euler(0, offsetAngle, 0);
+        Quaternion targetRotation = baseRotation * offsetRotation;
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            Time.deltaTime * speed);
+    }
+
     void UpdateAnimator()
     {
         Vector3 currentVelocity = isDashing ? transform.forward * dashSpeed : agent.velocity;
         Vector3 local = transform.InverseTransformDirection(currentVelocity);
         anim.SetFloat("VelocityX", local.x / chaseSpeed, 0.15f, Time.deltaTime);
         anim.SetFloat("VelocityZ", local.z / chaseSpeed, 0.15f, Time.deltaTime);
+    }
+
+    // 音乐接口
+    public void PlaySFX(AudioClip clip)
+    {
+        if (audioSource && clip)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }
