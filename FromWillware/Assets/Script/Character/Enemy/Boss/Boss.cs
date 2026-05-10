@@ -8,7 +8,8 @@ public class Boss : Character
     protected Animator anim;
     protected NavMeshAgent agent;
 
-    [Header("目标")]
+    [Header("Boss")]
+    public string bossID = "Boss_1";
     public Transform playerTarget;
 
     [Header("移动参数")]
@@ -70,6 +71,17 @@ public class Boss : Character
     protected float pushDistanceRemaining = 0f;
 
     protected Collider bodyCollider;
+
+   
+    public void Awake() 
+    {
+        PlayerPrefs.DeleteAll();
+        // 检查 PlayerPrefs，如果该 ID 对应的值为 1，说明已经死过了
+        if (PlayerPrefs.GetInt(bossID + "_IsDead", 0) == 1)
+        {
+            Destroy(gameObject); 
+        }
+    }
 
     protected virtual void Start()
     {
@@ -175,6 +187,7 @@ public class Boss : Character
         // 3. 处理技能执行/前奏
         if (isExecutingSkill)
         {
+            anim.applyRootMotion = true;
             float offset = (currentActiveSkill != null) ? currentActiveSkill.angleOffset : 0f;
             FaceTargetWithOffset(12f, offset);
             if (!anim.IsInTransition(0) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98f) OnSkillEnd();
@@ -347,6 +360,7 @@ public class Boss : Character
         isExecutingSkill = false;
         currentActiveSkill = null;
         agent.isStopped = false;
+        anim.applyRootMotion = false;
     }
 
     public override void Die()
@@ -354,6 +368,9 @@ public class Boss : Character
         if (isDashing) EndDash();
         if (currentActiveSkill != null) currentActiveSkill.DisableWeapon();
         agent.isStopped = true;
+        agent.enabled = false;
+        bodyCollider.enabled = false; 
+
         IsDead = true;
         anim.SetTrigger("DoDeath");
         if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
@@ -367,6 +384,11 @@ public class Boss : Character
                 ls.LevelUp();
             }
         }
+
+        Destroy(gameObject, 7f);
+
+        PlayerPrefs.SetInt(bossID + "_IsDead", 1); 
+        PlayerPrefs.Save(); // 强制保存到硬盘
     }
 
     public void FaceTarget(float speed)
@@ -410,7 +432,7 @@ public class Boss : Character
         }
     }
 
-    // 进入二阶段的逻辑处理
+    // 进入二阶段
     public virtual void EnterPhaseTwo()
     {
         isPhaseTwoActive = true;
