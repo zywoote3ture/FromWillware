@@ -11,6 +11,7 @@ public class ItemBar : MonoBehaviour
     private PlayerMove playerMove;
     private PlayerAttack playerAttack;
     private PlayerParry playerParry;
+    private PlayerInputHandler inputHandler;
 
     void Start()
     {
@@ -19,6 +20,7 @@ public class ItemBar : MonoBehaviour
         playerAttack = GetComponent<PlayerAttack>();
         playerParry = GetComponent<PlayerParry>();
 
+        inputHandler = GetComponent<PlayerInputHandler>();
         Items.Clear();
         // 初始化固定槽位
         for (int i = 0; i < MaxItems; i++)
@@ -44,10 +46,10 @@ public class ItemBar : MonoBehaviour
 
         if (!canUse) return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) UseItem(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) UseItem(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) UseItem(2);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) UseItem(3);
+        if (inputHandler.useItem1Pressed) UseItem(0);
+        if (inputHandler.useItem2Pressed) UseItem(1);
+        if (inputHandler.useItem3Pressed) UseItem(2);
+        if (inputHandler.useItem4Pressed) UseItem(3);
     }
 
     // ⭐ 使用物品

@@ -13,12 +13,15 @@ public class InventoryUIManager : MonoBehaviour
     public Button closeButton;
     public RectTransform selectionBox;
 
+    
     [Header("键盘导航设置")]
     public int columns = 9; // 你的背包每行有几个格子？(根据截图应该是9)
     private int currentSelectedIndex = 0; // 当前选中的格子序号
 
     public InventorySlotUI[] slots;
 
+    public Player player;
+    private PlayerInputHandler inputHandler;
     void Awake()
     {
         Instance = this;
@@ -39,6 +42,8 @@ public class InventoryUIManager : MonoBehaviour
 
         if (selectionBox != null)
             selectionBox.gameObject.SetActive(false);
+        inputHandler = FindObjectOfType<PlayerInputHandler>();
+        player = FindObjectOfType<Player>();
     }
 
     void Update()
@@ -48,7 +53,7 @@ public class InventoryUIManager : MonoBehaviour
             backPack = FindObjectOfType<ConsumableBackPack>();
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (inputHandler.backPackPressed)
         {
             ToggleInventory();
         }
@@ -71,6 +76,7 @@ public class InventoryUIManager : MonoBehaviour
     void ToggleInventory()
     {
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        player.IsInventoryOn = inventoryPanel.activeSelf;
         UpdateMouseCursor();
 
         if (inventoryPanel.activeSelf)
@@ -142,7 +148,7 @@ public class InventoryUIManager : MonoBehaviour
     void HandleKeyboardNavigation()
     {
         // 向左移动 (J)
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.J)||inputHandler.chooseItemLeftPressed)
         {
             // 只要当前不在最左边一列（对列数取余不为0），且序号 > 0
             if (currentSelectedIndex % columns != 0 && currentSelectedIndex - 1 >= 0)
@@ -151,7 +157,7 @@ public class InventoryUIManager : MonoBehaviour
             }
         }
         // 向右移动 (L)
-        else if (Input.GetKeyDown(KeyCode.L))
+        else if (Input.GetKeyDown(KeyCode.L)||inputHandler.chooseItemRightPressed)
         {
             // 只要移动后不在下一行的第一列，且没超出总格子数
             if ((currentSelectedIndex + 1) % columns != 0 && currentSelectedIndex + 1 < slots.Length)
@@ -160,7 +166,7 @@ public class InventoryUIManager : MonoBehaviour
             }
         }
         // 向上移动 (I)
-        else if (Input.GetKeyDown(KeyCode.I))
+        else if (Input.GetKeyDown(KeyCode.I)||inputHandler.chooseItemUpPressed)
         {
             // 只要减去一行的数量不小于0（即不在第一行）
             if (currentSelectedIndex - columns >= 0)
@@ -169,7 +175,7 @@ public class InventoryUIManager : MonoBehaviour
             }
         }
         // 向下移动 (K)
-        else if (Input.GetKeyDown(KeyCode.K))
+        else if (Input.GetKeyDown(KeyCode.K)||inputHandler.chooseItemDownPressed)
         {
             // 只要加上一行的数量没超出总格子数
             if (currentSelectedIndex + columns < slots.Length)
@@ -200,10 +206,10 @@ public class InventoryUIManager : MonoBehaviour
         if (backPack == null || currentSelectedIndex < 0 || currentSelectedIndex >= backPack.Items.Count) return;
 
         // 按下数字键 1, 2, 3, 4 绑定到对应的快捷栏 (索引为 0, 1, 2, 3)
-        if (Input.GetKeyDown(KeyCode.Alpha1)) backPack.AddToItemBar(currentSelectedIndex, 0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) backPack.AddToItemBar(currentSelectedIndex, 1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) backPack.AddToItemBar(currentSelectedIndex, 2);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) backPack.AddToItemBar(currentSelectedIndex, 3);
+        if (Input.GetKeyDown(KeyCode.Alpha1)||inputHandler.setItem1Pressed) backPack.AddToItemBar(currentSelectedIndex, 0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)||inputHandler.setItem2Pressed) backPack.AddToItemBar(currentSelectedIndex, 1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)||inputHandler.setItem3Pressed) backPack.AddToItemBar(currentSelectedIndex, 2);
+        if (Input.GetKeyDown(KeyCode.Alpha4)||inputHandler.setItem4Pressed) backPack.AddToItemBar(currentSelectedIndex, 3);
 
         // 按下 X 键解除绑定
         if (Input.GetKeyDown(KeyCode.X))

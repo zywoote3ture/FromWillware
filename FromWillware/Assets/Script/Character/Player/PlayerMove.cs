@@ -43,6 +43,16 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!playerState.CanMove)
+        {
+            inputDir = Vector2.zero;
+
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+
+            animator.SetFloat("Speed", 0);
+
+            return; // 直接退出Update
+        }
         if (playerState.CanMove)
         {
             inputDir.x = Input.GetAxis("Horizontal");
@@ -58,6 +68,7 @@ public class PlayerMove : MonoBehaviour
 
     void Move()
     {
+        
         float h = inputDir.x;
         float v = inputDir.y;
 

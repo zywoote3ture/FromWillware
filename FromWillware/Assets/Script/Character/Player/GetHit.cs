@@ -19,6 +19,7 @@ public class GetHit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         player = GetComponent<Player>();
         playerMove = GetComponent<PlayerMove>();
         playerParry = GetComponent<PlayerParry>();
@@ -30,7 +31,16 @@ public class GetHit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        AnimatorStateInfo stateInfo =
+            animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("GetHit"))
+        {
+            if (stateInfo.normalizedTime >= 1f)
+            {
+                IsGetHit = false;
+            }
+        }
     }
 
     public void TakeDamage(int damage)
@@ -49,30 +59,16 @@ public class GetHit : MonoBehaviour
 
         if (playerState.CanGetHit)
         {
-            StartCoroutine(GetHitCoroutine());
+            // 停止移动
+            Rigidbody rb = GetComponent<Rigidbody>();
+            rb.velocity = Vector3.zero;
+
+            animator.SetTrigger("GetHit");
         }
 
         audioSource.PlayOneShot(HitSound);
     }
     
-    private Coroutine hitCoroutine;
-
-    IEnumerator GetHitCoroutine()
-    {
-        if (hitCoroutine != null)
-            StopCoroutine(hitCoroutine);
-
-        IsGetHit = true;
-
-        animator.SetTrigger("GetHit");
-
-        // 等待受击动画时间
-        yield return new WaitForSeconds(0.5f);
-
-        IsGetHit = false;
-
-        hitCoroutine = null;
-    }
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("EnemyAttack"))
@@ -85,8 +81,11 @@ public class GetHit : MonoBehaviour
                 return;
             }
             Damage ennemyDamage = other.GetComponent<Damage>();
+            
             if (ennemyDamage != null)
                 TakeDamage(ennemyDamage.damage);
+            
+            
         }
         else
         {

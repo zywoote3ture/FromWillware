@@ -25,6 +25,23 @@ public class PlayerInputHandler : MonoBehaviour
 
     public bool switchWeapon;
     public bool resetCamera;
+
+    public bool useItem1Pressed;
+    public bool useItem2Pressed;
+    public bool useItem3Pressed;
+    public bool useItem4Pressed;
+
+    public bool backPackPressed;
+
+    public bool chooseItemUpPressed;
+    public bool chooseItemDownPressed;
+    public bool chooseItemLeftPressed;
+    public bool chooseItemRightPressed;
+    
+    public bool setItem1Pressed;
+    public bool setItem2Pressed;
+    public bool setItem3Pressed;
+    public bool setItem4Pressed;
     void Awake()
     {
         input = new PlayerInputActions();
@@ -87,6 +104,23 @@ public class PlayerInputHandler : MonoBehaviour
         input.Player.WeaponSwitch.performed += ctx => switchWeapon = true;
         
         input.Player.ResetCamera.performed += ctx => resetCamera = true;
+        
+        input.Player.UseItem1.performed += ctx => useItem1Pressed = true;
+        input.Player.UseItem2.performed += ctx => useItem2Pressed = true;
+        input.Player.UseItem3.performed += ctx => useItem3Pressed = true;
+        input.Player.UseItem4.performed += ctx => useItem4Pressed = true;
+        
+        input.Player.BackPack.performed += ctx => backPackPressed = true;
+        
+        input.Player.ChooseItemUp.performed += ctx => chooseItemUpPressed = true;
+        input.Player.ChooseItemDown.performed += ctx => chooseItemDownPressed = true;
+        input.Player.ChooseItemLeft.performed += ctx => chooseItemLeftPressed = true;
+        input.Player.ChooseItemRight.performed += ctx => chooseItemRightPressed = true;
+        
+        input.Player.SetItem1.performed += ctx => setItem1Pressed = true;
+        input.Player.SetItem2.performed += ctx => setItem2Pressed = true;
+        input.Player.SetItem3.performed += ctx => setItem3Pressed = true;
+        input.Player.SetItem4.performed += ctx => setItem4Pressed = true;
     }
 
     void LateUpdate()
@@ -104,6 +138,23 @@ public class PlayerInputHandler : MonoBehaviour
         switchWeapon = false;
 
         resetCamera = false;
+        
+        useItem1Pressed = false;
+        useItem2Pressed = false;
+        useItem3Pressed = false;
+        useItem4Pressed = false;
+        
+        backPackPressed = false;
+        
+        chooseItemUpPressed = false;
+        chooseItemDownPressed = false;
+        chooseItemLeftPressed = false;
+        chooseItemRightPressed = false;
+
+        setItem1Pressed = false;
+        setItem2Pressed = false;
+        setItem3Pressed = false;
+        setItem4Pressed = false;
     }
     public void ConsumeSwitchTarget()
     {
