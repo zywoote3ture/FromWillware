@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack1_2 : MonoBehaviour
+public class Attack1_2 : BossSkill
 {
     // Start is called before the first frame update
     void Start()

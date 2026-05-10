@@ -5,10 +5,11 @@ using System.Linq;
 
 public class Boss : Character
 {
-    private Animator anim;
-    private NavMeshAgent agent;
+    protected Animator anim;
+    protected NavMeshAgent agent;
 
-    [Header("目标")]
+    [Header("Boss")]
+    public string bossID = "Boss_1";
     public Transform playerTarget;
 
     [Header("移动参数")]
@@ -23,44 +24,66 @@ public class Boss : Character
     public float dashSpeed = 16f;         
     public float dashCooldown = 6f;
     public float dashMaxDuration = 1.5f;
-    private float lastDashTime = -999f;
-    private bool isDashing = false;
-    private float dashTimer = 0f;
-    private Vector3 dashTargetPoint;
+    protected float lastDashTime = -999f;
+    protected bool isDashing = false;
+    protected float dashTimer = 0f;
+    protected Vector3 dashTargetPoint;
 
     [Header("破防系统")]
     public float staggerThreshold = 100f;
     public float currentStagger = 0f;
 
+    [Header("二阶段设置")]
+    public bool hasPhaseTwo = true;           
+    protected float phaseTwoHPPercent = 0.5f;    
+    public float phaseTwoCooldown = 3f;
+    public GameObject minionPrefabA;
+    public GameObject minionPrefabB;
+    public Transform spawnPointA;
+    public Transform spawnPointB;
+    protected bool isPhaseTwoActive = false;  
+
     [Header("音效参数")]
     public AudioSource audioSource;
     public AudioClip hitSound;      
-    public AudioClip breakSound;   
+    public AudioClip breakSound;
+    public AudioClip summonSound;
     public AudioClip dashSound;     
     public AudioClip deathSound;
 
     [Header("经验参数")]
     public int expReward = 500;
 
-    [HideInInspector] public bool isExecutingSkill { get; private set; }
+    [HideInInspector] public bool isExecutingSkill { get; protected set; }
 
-    private BossSkill currentActiveSkill;
-    private BossSkill pendingSkill;
+    protected BossSkill currentActiveSkill;
+    protected BossSkill pendingSkill;
 
-    private bool isMovingToAttackDistance = false;
-    private float attackDistanceTolerance = 0.5f;
+    protected bool isMovingToAttackDistance = false;
+    protected float attackDistanceTolerance = 0.5f;
 
-    private float lastActionTime = -999f;
-    private List<BossSkill> skills;
-    private BossMoveController moveController;
-    private BossSkillSelector skillSelector;
+    protected float lastActionTime = -999f;
+    protected List<BossSkill> skills;
+    protected BossMoveController moveController;
+    protected BossSkillSelector skillSelector;
 
-    private bool isInStagger = false;
-    private float pushDistanceRemaining = 0f;
+    protected bool isInStagger = false;
+    protected float pushDistanceRemaining = 0f;
 
-    private Collider bodyCollider;
+    protected Collider bodyCollider;
 
-    void Start()
+   
+    public void Awake() 
+    {
+        PlayerPrefs.DeleteAll();
+        // 检查 PlayerPrefs，如果该 ID 对应的值为 1，说明已经死过了
+        if (PlayerPrefs.GetInt(bossID + "_IsDead", 0) == 1)
+        {
+            Destroy(gameObject); 
+        }
+    }
+
+    protected virtual void Start()
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
@@ -115,6 +138,13 @@ public class Boss : Character
         CurrentHP -= damageAmount;
         currentStagger += damageAmount;
         if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
+
+        if (hasPhaseTwo && !isPhaseTwoActive && (float)CurrentHP / MaxHP <= phaseTwoHPPercent)
+        {
+            EnterPhaseTwo();
+            return;
+        }
+
         if (CurrentHP <= 0) { Die(); return; }
 
         bool isHyper = isExecutingSkill && currentActiveSkill != null && currentActiveSkill.isHyperArmor;
@@ -125,7 +155,7 @@ public class Boss : Character
         }
     }
 
-    void Update()
+    public virtual void Update()
     {
         if (IsDead || playerTarget == null) return;
 
@@ -157,6 +187,7 @@ public class Boss : Character
         // 3. 处理技能执行/前奏
         if (isExecutingSkill)
         {
+            anim.applyRootMotion = true;
             float offset = (currentActiveSkill != null) ? currentActiveSkill.angleOffset : 0f;
             FaceTargetWithOffset(12f, offset);
             if (!anim.IsInTransition(0) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98f) OnSkillEnd();
@@ -204,7 +235,7 @@ public class Boss : Character
     }
 
 
-    private void StartDash()
+    protected void StartDash()
     {
         isDashing = true;
         dashTimer = 0f;
@@ -223,7 +254,7 @@ public class Boss : Character
         if (audioSource && dashSound) audioSource.PlayOneShot(dashSound);
     }
 
-    private void UpdateDashLogic()
+    protected void UpdateDashLogic()
     {
         dashTimer += Time.deltaTime;
 
@@ -239,7 +270,7 @@ public class Boss : Character
         }
     }
 
-    private void EndDash()
+    protected void EndDash()
     {
         isDashing = false;
         gameObject.tag = "Enemy";
@@ -250,7 +281,7 @@ public class Boss : Character
     }
 
 
-    private void UpdateRepositionLogic()
+    protected void UpdateRepositionLogic()
     {
         float moveDistance = Vector3.Distance(transform.position, playerTarget.position);
         if (Mathf.Abs(moveDistance - pendingSkill.attackDistance) <= attackDistanceTolerance)
@@ -276,7 +307,7 @@ public class Boss : Character
         anim.SetTrigger("DoStagger_Minor");
     }
 
-    private void TriggerBreak()
+    protected void TriggerBreak()
     {
         if (isDashing) EndDash();
         StartStaggerLogic(2f);
@@ -284,7 +315,7 @@ public class Boss : Character
         if (audioSource && breakSound) audioSource.PlayOneShot(breakSound);
     }
 
-    private void StartStaggerLogic(float pushDist)
+    protected void StartStaggerLogic(float pushDist)
     {
         if (bodyCollider != null) bodyCollider.isTrigger = true;
         if (currentActiveSkill != null) currentActiveSkill.DisableWeapon();
@@ -298,7 +329,7 @@ public class Boss : Character
         agent.velocity = Vector3.zero;
     }
 
-    private void EndStaggerInternal()
+    protected void EndStaggerInternal()
     {
         isInStagger = false;
         pushDistanceRemaining = 0f;
@@ -306,7 +337,7 @@ public class Boss : Character
         if (bodyCollider != null) bodyCollider.isTrigger = false;
     }
 
-    private void ExecuteSkill(BossSkill skill)
+    protected void ExecuteSkill(BossSkill skill)
     {
         isExecutingSkill = true;
         currentActiveSkill = skill;
@@ -329,6 +360,7 @@ public class Boss : Character
         isExecutingSkill = false;
         currentActiveSkill = null;
         agent.isStopped = false;
+        anim.applyRootMotion = false;
     }
 
     public override void Die()
@@ -336,6 +368,9 @@ public class Boss : Character
         if (isDashing) EndDash();
         if (currentActiveSkill != null) currentActiveSkill.DisableWeapon();
         agent.isStopped = true;
+        agent.enabled = false;
+        bodyCollider.enabled = false; 
+
         IsDead = true;
         anim.SetTrigger("DoDeath");
         if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
@@ -349,9 +384,14 @@ public class Boss : Character
                 ls.LevelUp();
             }
         }
+
+        Destroy(gameObject, 7f);
+
+        PlayerPrefs.SetInt(bossID + "_IsDead", 1); 
+        PlayerPrefs.Save(); // 强制保存到硬盘
     }
 
-    void FaceTarget(float speed)
+    public void FaceTarget(float speed)
     {
         Vector3 dir = (playerTarget.position - transform.position);
         dir.y = 0;
@@ -359,7 +399,7 @@ public class Boss : Character
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * speed);
     }
 
-    void FaceTargetWithOffset(float speed, float offsetAngle)
+   public void FaceTargetWithOffset(float speed, float offsetAngle)
     {
         Vector3 dir = (playerTarget.position - transform.position);
         dir.y = 0;
@@ -375,7 +415,7 @@ public class Boss : Character
             Time.deltaTime * speed);
     }
 
-    void UpdateAnimator()
+    public void UpdateAnimator()
     {
         Vector3 currentVelocity = isDashing ? transform.forward * dashSpeed : agent.velocity;
         Vector3 local = transform.InverseTransformDirection(currentVelocity);
@@ -391,4 +431,42 @@ public class Boss : Character
             audioSource.PlayOneShot(clip);
         }
     }
+
+    // AOE特效
+    public void TriggerSkillAOE()
+    {
+        if (currentActiveSkill != null)
+        {
+            currentActiveSkill.SpawnAOE();
+        }
+    }
+
+    // 进入二阶段
+    public virtual void EnterPhaseTwo()
+    {
+        isPhaseTwoActive = true;
+
+        actionCooldown = phaseTwoCooldown;
+        Debug.Log("Boss进入二阶段，攻击冷却缩短为: " + actionCooldown);
+        
+        if (isDashing) EndDash();
+        isExecutingSkill = true; 
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+        anim.SetTrigger("DoSummon");
+
+        SummonMinions();
+    }
+
+    public void SummonMinions()
+    {
+        if (spawnPointA != null)
+            Instantiate(minionPrefabA, spawnPointA.position, spawnPointA.rotation);
+
+        if (spawnPointB != null)
+            Instantiate(minionPrefabB, spawnPointB.position, spawnPointB.rotation);
+
+        if (audioSource && summonSound) audioSource.PlayOneShot(summonSound);
+    }
+
 }

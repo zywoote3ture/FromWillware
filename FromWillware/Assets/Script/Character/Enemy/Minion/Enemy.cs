@@ -20,6 +20,8 @@ public class Enemy : Character
     private bool isActivated = false;
     public bool isDead = false;
 
+    public int expReward = 50;
+
     private float lastAttackTime = -999f;
 
     private EnemyAttack enemyWeapon;
@@ -130,6 +132,16 @@ public class Enemy : Character
         anim.applyRootMotion = true;
         //销毁尸体
         Destroy(gameObject, 5f);
+
+        if (playerTarget != null)
+        {
+            LevelSystem ls = playerTarget.GetComponent<LevelSystem>();
+            if (ls != null)
+            {
+                ls.exp += expReward;
+                ls.LevelUp();
+            }
+        }
     }
 
     // 开启武器伤害与重置锁
