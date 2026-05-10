@@ -432,6 +432,15 @@ public class Boss : Character
         }
     }
 
+    // AOE特效
+    public void TriggerSkillAOE()
+    {
+        if (currentActiveSkill != null)
+        {
+            currentActiveSkill.SpawnAOE();
+        }
+    }
+
     // 进入二阶段
     public virtual void EnterPhaseTwo()
     {

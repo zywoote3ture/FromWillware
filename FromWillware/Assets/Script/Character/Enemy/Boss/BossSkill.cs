@@ -9,8 +9,10 @@ public abstract class BossSkill : MonoBehaviour
     public float minRange = 0f;
     public float maxRange = 10f;
 
-    [Header("实际攻击距离")]
+    [Header("实际攻击参数")]
     public float attackDistance = 5f;
+    public int damage = 20;
+    public Collider weaponCollider;
 
     [Header("角度修正")]
     public float angleOffset = 0f; 
@@ -18,8 +20,10 @@ public abstract class BossSkill : MonoBehaviour
     [Header("霸体")]
     public bool isHyperArmor = false;
 
-    public int damage = 20;
-    public Collider weaponCollider;
+    [Header("特效与AOE攻击")]
+    public GameObject aoeVfxPrefab;
+    public float forwardOffset = 3f;   
+    public float lifeTime = 1f;
 
     protected Boss boss;
     protected Animator anim;
@@ -43,6 +47,22 @@ public abstract class BossSkill : MonoBehaviour
     {
         boss.OnSkillStart(this);
         anim.SetTrigger(animationTriggerName);
+    }
+
+    public void SpawnAOE()
+    {
+        if (aoeVfxPrefab == null || boss == null) return;
+
+        Vector3 spawnPos = boss.transform.position
+                           + boss.transform.forward * forwardOffset;
+        spawnPos += Vector3.up * 0.5f;
+
+        Quaternion spawnRot = boss.transform.rotation
+                        * Quaternion.Euler(0, 180f, 0);
+
+        GameObject spike = Instantiate(aoeVfxPrefab, spawnPos, spawnRot);
+
+        Destroy(spike, lifeTime);
     }
 
     public void EnableWeapon()
