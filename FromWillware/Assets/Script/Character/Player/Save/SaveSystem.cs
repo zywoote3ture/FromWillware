@@ -9,34 +9,62 @@ public class SaveSystem : MonoBehaviour
     public string fileName = "save.json";
 
     private bool canSave = false;
-    
-    // 把路径获取改为公开的静态方法，方便主菜单检查存档是否存在
-    public static string GetSavePath(string fileName) 
+    private PlayerInputHandler inputHandler;
+
+    [Header("交互UI")]
+    public GameObject interactPromptPrefab;
+    public Transform uiCanvas;
+
+    private GameObject currentPrompt;
+    private Transform savePointTarget;
+
+    public static string GetSavePath(string fileName)
     {
         return System.IO.Path.Combine(Application.persistentDataPath, fileName);
     }
 
-    // 跨场景信号：决定场景加载后是否要读取本地存档
     public static bool shouldLoadSaveGame = false;
 
     string Path => GetSavePath(fileName);
+
+    public void Awake()
+    {
+        inputHandler = FindObjectOfType<PlayerInputHandler>();
+    }
 
     IEnumerator Start()
     {
         if (shouldLoadSaveGame)
         {
-            yield return null; // 等一帧
-
+            yield return null;
             Load();
-
             shouldLoadSaveGame = false;
         }
     }
 
     void Update()
     {
-        if (canSave && Input.GetKeyDown(KeyCode.E)) Save();
-        if (Input.GetKeyDown(KeyCode.I)) Load();
+        // ===== UI 跟随 =====
+        if (currentPrompt != null && savePointTarget != null)
+        {
+            Vector3 screenPos =
+                Camera.main.WorldToScreenPoint(
+                    savePointTarget.position + Vector3.up * 2f
+                );
+
+            currentPrompt.transform.position = screenPos;
+        }
+
+        // ===== 保存 =====
+        if (canSave && inputHandler.interactPressed)
+        {
+            Save();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Load();
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -44,6 +72,9 @@ public class SaveSystem : MonoBehaviour
         if (other.CompareTag("SavePoint"))
         {
             canSave = true;
+            savePointTarget = other.transform;
+
+            ShowPrompt();
         }
     }
 
@@ -52,9 +83,42 @@ public class SaveSystem : MonoBehaviour
         if (other.CompareTag("SavePoint"))
         {
             canSave = false;
+            savePointTarget = null;
+
+            HidePrompt();
         }
     }
 
+    void ShowPrompt()
+    {
+        if (currentPrompt != null) return;
+
+        currentPrompt = Instantiate(
+            interactPromptPrefab,
+            uiCanvas
+        );
+
+        if (savePointTarget != null)
+        {
+            Vector3 screenPos =
+                Camera.main.WorldToScreenPoint(
+                    savePointTarget.position + Vector3.up * 2f
+                );
+
+            currentPrompt.transform.position = screenPos;
+        }
+    }
+
+    void HidePrompt()
+    {
+        if (currentPrompt != null)
+        {
+            Destroy(currentPrompt);
+            currentPrompt = null;
+        }
+    }
+
+    // ================= SAVE =================
     public void Save()
     {
         SaveFile file = new SaveFile();
@@ -78,16 +142,20 @@ public class SaveSystem : MonoBehaviour
         string json = JsonUtility.ToJson(file, true);
         File.WriteAllText(Path, json);
 
-        // 如果你希望存档时也保存当前场景索引，可以加上这句
-        PlayerPrefs.SetInt("SavedSceneIndex", UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        PlayerPrefs.SetInt(
+            "SavedSceneIndex",
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+        );
+
         PlayerPrefs.Save();
 
         Debug.Log("Saved");
     }
 
+    // ================= LOAD =================
     public void Load()
     {
-        if (!File.Exists(Path)) 
+        if (!File.Exists(Path))
         {
             Debug.LogWarning("未找到存档文件！");
             return;

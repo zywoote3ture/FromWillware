@@ -17,6 +17,7 @@ public class WeaponSystem : MonoBehaviour
     private AnimatorOverrideController runtimeOverride;
     private Player player;
     private WeaponBackPack weaponBackPack;
+    private PlayerInputHandler inputHandler;
     
     // Start is called before the first frame update
     void Start()
@@ -24,12 +25,13 @@ public class WeaponSystem : MonoBehaviour
         Weapons = new List<Transform>(2);
         animator = GetComponent<Animator>();
         weaponBackPack = GetComponent<WeaponBackPack>();
+        inputHandler = GetComponent<PlayerInputHandler>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (inputHandler.switchWeapon)
         {
             ChangeWeapon();
         }

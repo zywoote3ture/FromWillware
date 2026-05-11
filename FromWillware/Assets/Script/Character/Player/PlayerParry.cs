@@ -31,21 +31,28 @@ public class PlayerParry : MonoBehaviour
 
     public void Defense()
     {
-        if (!playerState.CanParry) return;
-        
-        if (Input.GetKeyDown(KeyCode.K)||inputHandler.parryPressed)
+        if (!playerState.CanParry)
         {
-            animator.SetBool("IsDefensing", true);
-            IsDefensing = true;
-            // 开启弹反窗口（瞬间）
-            StartCoroutine(Parry());
+            StopDefense();
+            return;
         }
 
-        if (Input.GetKeyUp(KeyCode.K)||inputHandler.parryReleased)
+        bool defending = inputHandler.parryHeld;
+
+        animator.SetBool("IsDefensing", defending);
+        IsDefensing = defending;
+
+        // 只有按下瞬间开启弹反窗口
+        if (inputHandler.parryPressed)
         {
-            animator.SetBool("IsDefensing", false);
-            IsDefensing = false;
+            StartCoroutine(Parry());
         }
+    }
+    
+    private void StopDefense()
+    {
+        animator.SetBool("IsDefensing", false);
+        IsDefensing = false;
     }
 
     IEnumerator Parry()

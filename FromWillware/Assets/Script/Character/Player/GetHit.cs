@@ -19,6 +19,7 @@ public class GetHit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         player = GetComponent<Player>();
         playerMove = GetComponent<PlayerMove>();
         playerParry = GetComponent<PlayerParry>();
@@ -30,32 +31,44 @@ public class GetHit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        AnimatorStateInfo stateInfo =
+            animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("GetHit"))
+        {
+            if (stateInfo.normalizedTime >= 1f)
+            {
+                IsGetHit = false;
+            }
+        }
     }
 
     public void TakeDamage(int damage)
     {
-        if(player.IsDead||playerMove.IsRolling) return;
+        if(player.IsDead || playerMove.IsRolling)
+            return;
 
-        
-        player.CurrentHP -= damage;    
-        Debug.Log("The player has been hit " + damage);
+        player.CurrentHP -= damage;
+
         if (player.CurrentHP <= 0)
         {
             audioSource.PlayOneShot(HitSound);
             player.Die();
             return;
         }
-        
+
         if (playerState.CanGetHit)
         {
-            animator.SetTrigger("GetHit");
-            
-        }
-        audioSource.PlayOneShot(HitSound);
-       
-    }
+            // 停止移动
+            Rigidbody rb = GetComponent<Rigidbody>();
+            rb.velocity = Vector3.zero;
 
+            animator.SetTrigger("GetHit");
+        }
+
+        audioSource.PlayOneShot(HitSound);
+    }
+    
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("EnemyAttack"))
@@ -68,8 +81,11 @@ public class GetHit : MonoBehaviour
                 return;
             }
             Damage ennemyDamage = other.GetComponent<Damage>();
+            
             if (ennemyDamage != null)
                 TakeDamage(ennemyDamage.damage);
+            
+            
         }
         else
         {

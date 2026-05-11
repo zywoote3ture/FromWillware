@@ -172,6 +172,141 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchTarget"",
+                    ""type"": ""Value"",
+                    ""id"": ""2f15f67e-ea96-4974-9846-95089e57a1c5"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""WeaponSwitch"",
+                    ""type"": ""Button"",
+                    ""id"": ""42e9c057-fed4-4064-a683-84ca19915c0b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ResetCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""df6aafda-caed-45de-aaff-032d9647dcc2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem1"",
+                    ""type"": ""Button"",
+                    ""id"": ""5247d6c6-2370-4a67-91de-a63883f93a4a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem2"",
+                    ""type"": ""Button"",
+                    ""id"": ""4175e7fc-c7fc-4110-bef9-6619b07bd4f4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem3"",
+                    ""type"": ""Button"",
+                    ""id"": ""e50bdf83-8ff7-4a14-9c52-cb81adcdb5a1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem4"",
+                    ""type"": ""Button"",
+                    ""id"": ""3ee50248-553e-44f9-90c5-351940a308d5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseItemUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""908af5a9-1c28-48d3-83ad-f83d21498e54"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseItemDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""5cc60bc8-bcf4-4df3-a408-e429b1eb4872"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseItemLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""94728542-32f2-453c-a913-7ca6fc6302ee"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseItemRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""697d76e4-152a-4944-8ad5-08bc9ba60748"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetItem1"",
+                    ""type"": ""Button"",
+                    ""id"": ""426c2476-b3bb-42dd-9ebe-331963c144eb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetItem2"",
+                    ""type"": ""Button"",
+                    ""id"": ""b72d689d-9115-4193-81b9-288a6f1cb2ee"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetItem3"",
+                    ""type"": ""Button"",
+                    ""id"": ""c034c1fa-df30-4fd5-8bac-6f2fb892441e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetItem4"",
+                    ""type"": ""Button"",
+                    ""id"": ""bba8d8af-ce8f-4c7b-a59c-0842de21635e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -361,6 +496,336 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Running"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0209843-bb59-42b7-b1f1-d6830fc1b8c1"",
+                    ""path"": ""<Gamepad>/rightStick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97769de3-0d2d-4930-86c7-aea79313b08c"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e92b020c-adbc-4398-8321-1ec70edb7ccb"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WeaponSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0c73d06-a7ea-4070-8d48-a4cd60df6ab7"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WeaponSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b2e1a15-00c4-44c8-84e0-089a2e2db140"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88da2985-8cd4-4cf2-ad08-54c908c24594"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a9d9b30b-fc99-4a0a-be51-d0094523a437"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2896a492-3504-4dfe-9e87-d7b4ba2f1dd7"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41e20d8c-79cf-4b6c-be9e-671634f5bfd3"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46a98eea-0a41-4786-a3c5-cd4846cde92a"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48ede404-49db-42f9-9fba-3664c4ba4829"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02feb4e5-21b2-4fe5-8f59-94c5a7f23e89"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d070789a-a412-4fc5-bb8f-b3091b9dccfc"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65285b80-0e0e-42e4-965f-795e821068b0"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67595217-bfa8-4c15-8476-57c7b760a869"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d4333ab-22f5-4928-b7a3-e2087bd9f6f9"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76b938ad-da3c-4085-8972-b8cb9efb24c5"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a8e92d1-1e9a-44d1-bad6-381d3944e8be"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c9fd14f-399f-4342-a774-fb0626a045a9"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f63135d-6d3c-40a3-98fe-0980eaff68c7"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8cca075-5578-4b2e-ac54-6c46b79dc04c"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2601e3ae-922d-4133-a59c-14f355217048"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItemRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57bc633a-db76-418f-85bd-05e40ca42a87"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25651816-06fc-494e-9583-5edf1a108ce9"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""563830a7-e4f2-422c-938e-0fc9ccc29dfa"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b831bb31-b402-4968-83e5-c64bb395112d"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9697a6de-8b65-480b-9384-25ed37946992"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7fcd109d-d0c3-41b3-9261-968b687de485"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""500119e8-59ce-4192-8ee5-502cf6426bba"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e86f0181-404d-4015-99f5-235311b79d98"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetItem4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -378,6 +843,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_BackPack = m_Player.FindAction("BackPack", throwIfNotFound: true);
         m_Player_Parry = m_Player.FindAction("Parry", throwIfNotFound: true);
         m_Player_Running = m_Player.FindAction("Running", throwIfNotFound: true);
+        m_Player_SwitchTarget = m_Player.FindAction("SwitchTarget", throwIfNotFound: true);
+        m_Player_WeaponSwitch = m_Player.FindAction("WeaponSwitch", throwIfNotFound: true);
+        m_Player_ResetCamera = m_Player.FindAction("ResetCamera", throwIfNotFound: true);
+        m_Player_UseItem1 = m_Player.FindAction("UseItem1", throwIfNotFound: true);
+        m_Player_UseItem2 = m_Player.FindAction("UseItem2", throwIfNotFound: true);
+        m_Player_UseItem3 = m_Player.FindAction("UseItem3", throwIfNotFound: true);
+        m_Player_UseItem4 = m_Player.FindAction("UseItem4", throwIfNotFound: true);
+        m_Player_ChooseItemUp = m_Player.FindAction("ChooseItemUp", throwIfNotFound: true);
+        m_Player_ChooseItemDown = m_Player.FindAction("ChooseItemDown", throwIfNotFound: true);
+        m_Player_ChooseItemLeft = m_Player.FindAction("ChooseItemLeft", throwIfNotFound: true);
+        m_Player_ChooseItemRight = m_Player.FindAction("ChooseItemRight", throwIfNotFound: true);
+        m_Player_SetItem1 = m_Player.FindAction("SetItem1", throwIfNotFound: true);
+        m_Player_SetItem2 = m_Player.FindAction("SetItem2", throwIfNotFound: true);
+        m_Player_SetItem3 = m_Player.FindAction("SetItem3", throwIfNotFound: true);
+        m_Player_SetItem4 = m_Player.FindAction("SetItem4", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -467,6 +947,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_BackPack;
     private readonly InputAction m_Player_Parry;
     private readonly InputAction m_Player_Running;
+    private readonly InputAction m_Player_SwitchTarget;
+    private readonly InputAction m_Player_WeaponSwitch;
+    private readonly InputAction m_Player_ResetCamera;
+    private readonly InputAction m_Player_UseItem1;
+    private readonly InputAction m_Player_UseItem2;
+    private readonly InputAction m_Player_UseItem3;
+    private readonly InputAction m_Player_UseItem4;
+    private readonly InputAction m_Player_ChooseItemUp;
+    private readonly InputAction m_Player_ChooseItemDown;
+    private readonly InputAction m_Player_ChooseItemLeft;
+    private readonly InputAction m_Player_ChooseItemRight;
+    private readonly InputAction m_Player_SetItem1;
+    private readonly InputAction m_Player_SetItem2;
+    private readonly InputAction m_Player_SetItem3;
+    private readonly InputAction m_Player_SetItem4;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -514,6 +1009,66 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Running".
         /// </summary>
         public InputAction @Running => m_Wrapper.m_Player_Running;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SwitchTarget".
+        /// </summary>
+        public InputAction @SwitchTarget => m_Wrapper.m_Player_SwitchTarget;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/WeaponSwitch".
+        /// </summary>
+        public InputAction @WeaponSwitch => m_Wrapper.m_Player_WeaponSwitch;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ResetCamera".
+        /// </summary>
+        public InputAction @ResetCamera => m_Wrapper.m_Player_ResetCamera;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseItem1".
+        /// </summary>
+        public InputAction @UseItem1 => m_Wrapper.m_Player_UseItem1;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseItem2".
+        /// </summary>
+        public InputAction @UseItem2 => m_Wrapper.m_Player_UseItem2;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseItem3".
+        /// </summary>
+        public InputAction @UseItem3 => m_Wrapper.m_Player_UseItem3;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseItem4".
+        /// </summary>
+        public InputAction @UseItem4 => m_Wrapper.m_Player_UseItem4;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ChooseItemUp".
+        /// </summary>
+        public InputAction @ChooseItemUp => m_Wrapper.m_Player_ChooseItemUp;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ChooseItemDown".
+        /// </summary>
+        public InputAction @ChooseItemDown => m_Wrapper.m_Player_ChooseItemDown;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ChooseItemLeft".
+        /// </summary>
+        public InputAction @ChooseItemLeft => m_Wrapper.m_Player_ChooseItemLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ChooseItemRight".
+        /// </summary>
+        public InputAction @ChooseItemRight => m_Wrapper.m_Player_ChooseItemRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SetItem1".
+        /// </summary>
+        public InputAction @SetItem1 => m_Wrapper.m_Player_SetItem1;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SetItem2".
+        /// </summary>
+        public InputAction @SetItem2 => m_Wrapper.m_Player_SetItem2;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SetItem3".
+        /// </summary>
+        public InputAction @SetItem3 => m_Wrapper.m_Player_SetItem3;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SetItem4".
+        /// </summary>
+        public InputAction @SetItem4 => m_Wrapper.m_Player_SetItem4;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -567,6 +1122,51 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Running.started += instance.OnRunning;
             @Running.performed += instance.OnRunning;
             @Running.canceled += instance.OnRunning;
+            @SwitchTarget.started += instance.OnSwitchTarget;
+            @SwitchTarget.performed += instance.OnSwitchTarget;
+            @SwitchTarget.canceled += instance.OnSwitchTarget;
+            @WeaponSwitch.started += instance.OnWeaponSwitch;
+            @WeaponSwitch.performed += instance.OnWeaponSwitch;
+            @WeaponSwitch.canceled += instance.OnWeaponSwitch;
+            @ResetCamera.started += instance.OnResetCamera;
+            @ResetCamera.performed += instance.OnResetCamera;
+            @ResetCamera.canceled += instance.OnResetCamera;
+            @UseItem1.started += instance.OnUseItem1;
+            @UseItem1.performed += instance.OnUseItem1;
+            @UseItem1.canceled += instance.OnUseItem1;
+            @UseItem2.started += instance.OnUseItem2;
+            @UseItem2.performed += instance.OnUseItem2;
+            @UseItem2.canceled += instance.OnUseItem2;
+            @UseItem3.started += instance.OnUseItem3;
+            @UseItem3.performed += instance.OnUseItem3;
+            @UseItem3.canceled += instance.OnUseItem3;
+            @UseItem4.started += instance.OnUseItem4;
+            @UseItem4.performed += instance.OnUseItem4;
+            @UseItem4.canceled += instance.OnUseItem4;
+            @ChooseItemUp.started += instance.OnChooseItemUp;
+            @ChooseItemUp.performed += instance.OnChooseItemUp;
+            @ChooseItemUp.canceled += instance.OnChooseItemUp;
+            @ChooseItemDown.started += instance.OnChooseItemDown;
+            @ChooseItemDown.performed += instance.OnChooseItemDown;
+            @ChooseItemDown.canceled += instance.OnChooseItemDown;
+            @ChooseItemLeft.started += instance.OnChooseItemLeft;
+            @ChooseItemLeft.performed += instance.OnChooseItemLeft;
+            @ChooseItemLeft.canceled += instance.OnChooseItemLeft;
+            @ChooseItemRight.started += instance.OnChooseItemRight;
+            @ChooseItemRight.performed += instance.OnChooseItemRight;
+            @ChooseItemRight.canceled += instance.OnChooseItemRight;
+            @SetItem1.started += instance.OnSetItem1;
+            @SetItem1.performed += instance.OnSetItem1;
+            @SetItem1.canceled += instance.OnSetItem1;
+            @SetItem2.started += instance.OnSetItem2;
+            @SetItem2.performed += instance.OnSetItem2;
+            @SetItem2.canceled += instance.OnSetItem2;
+            @SetItem3.started += instance.OnSetItem3;
+            @SetItem3.performed += instance.OnSetItem3;
+            @SetItem3.canceled += instance.OnSetItem3;
+            @SetItem4.started += instance.OnSetItem4;
+            @SetItem4.performed += instance.OnSetItem4;
+            @SetItem4.canceled += instance.OnSetItem4;
         }
 
         /// <summary>
@@ -605,6 +1205,51 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Running.started -= instance.OnRunning;
             @Running.performed -= instance.OnRunning;
             @Running.canceled -= instance.OnRunning;
+            @SwitchTarget.started -= instance.OnSwitchTarget;
+            @SwitchTarget.performed -= instance.OnSwitchTarget;
+            @SwitchTarget.canceled -= instance.OnSwitchTarget;
+            @WeaponSwitch.started -= instance.OnWeaponSwitch;
+            @WeaponSwitch.performed -= instance.OnWeaponSwitch;
+            @WeaponSwitch.canceled -= instance.OnWeaponSwitch;
+            @ResetCamera.started -= instance.OnResetCamera;
+            @ResetCamera.performed -= instance.OnResetCamera;
+            @ResetCamera.canceled -= instance.OnResetCamera;
+            @UseItem1.started -= instance.OnUseItem1;
+            @UseItem1.performed -= instance.OnUseItem1;
+            @UseItem1.canceled -= instance.OnUseItem1;
+            @UseItem2.started -= instance.OnUseItem2;
+            @UseItem2.performed -= instance.OnUseItem2;
+            @UseItem2.canceled -= instance.OnUseItem2;
+            @UseItem3.started -= instance.OnUseItem3;
+            @UseItem3.performed -= instance.OnUseItem3;
+            @UseItem3.canceled -= instance.OnUseItem3;
+            @UseItem4.started -= instance.OnUseItem4;
+            @UseItem4.performed -= instance.OnUseItem4;
+            @UseItem4.canceled -= instance.OnUseItem4;
+            @ChooseItemUp.started -= instance.OnChooseItemUp;
+            @ChooseItemUp.performed -= instance.OnChooseItemUp;
+            @ChooseItemUp.canceled -= instance.OnChooseItemUp;
+            @ChooseItemDown.started -= instance.OnChooseItemDown;
+            @ChooseItemDown.performed -= instance.OnChooseItemDown;
+            @ChooseItemDown.canceled -= instance.OnChooseItemDown;
+            @ChooseItemLeft.started -= instance.OnChooseItemLeft;
+            @ChooseItemLeft.performed -= instance.OnChooseItemLeft;
+            @ChooseItemLeft.canceled -= instance.OnChooseItemLeft;
+            @ChooseItemRight.started -= instance.OnChooseItemRight;
+            @ChooseItemRight.performed -= instance.OnChooseItemRight;
+            @ChooseItemRight.canceled -= instance.OnChooseItemRight;
+            @SetItem1.started -= instance.OnSetItem1;
+            @SetItem1.performed -= instance.OnSetItem1;
+            @SetItem1.canceled -= instance.OnSetItem1;
+            @SetItem2.started -= instance.OnSetItem2;
+            @SetItem2.performed -= instance.OnSetItem2;
+            @SetItem2.canceled -= instance.OnSetItem2;
+            @SetItem3.started -= instance.OnSetItem3;
+            @SetItem3.performed -= instance.OnSetItem3;
+            @SetItem3.canceled -= instance.OnSetItem3;
+            @SetItem4.started -= instance.OnSetItem4;
+            @SetItem4.performed -= instance.OnSetItem4;
+            @SetItem4.canceled -= instance.OnSetItem4;
         }
 
         /// <summary>
@@ -708,5 +1353,110 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRunning(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SwitchTarget" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwitchTarget(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "WeaponSwitch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWeaponSwitch(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ResetCamera" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnResetCamera(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseItem1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseItem1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseItem2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseItem2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseItem3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseItem3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseItem4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseItem4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChooseItemUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChooseItemUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChooseItemDown" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChooseItemDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChooseItemLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChooseItemLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChooseItemRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChooseItemRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SetItem1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSetItem1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SetItem2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSetItem2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SetItem3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSetItem3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SetItem4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSetItem4(InputAction.CallbackContext context);
     }
 }

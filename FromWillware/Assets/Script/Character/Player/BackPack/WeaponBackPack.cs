@@ -3,65 +3,114 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponBackPack : BackPack,ISaveable
+public class WeaponBackPack : BackPack, ISaveable
 {
-    // Start is called before the first frame update
     public List<WeaponData> Weapons;
     public Transform WeaponPoint;
+
+    [Header("交互UI")]
+    public GameObject interactPromptPrefab;
+    public Transform uiCanvas;
+
+    private GameObject currentPrompt;
 
     private WeaponSystem weaponSystem;
     private WeaponPickup nearbyWeapon;
     private PlayerInputHandler inputHandler;
+    private PlayerState playerState;
+
     void Start()
     {
         CurrentIndex = 0;
         CurrentSize = 0;
+
         weaponSystem = GetComponent<WeaponSystem>();
         inputHandler = GetComponent<PlayerInputHandler>();
+        playerState = GetComponent<PlayerState>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         WeaponPickUp();
+
+        // ===== UI 跟随武器 =====
+        if (currentPrompt != null && nearbyWeapon != null)
+        {
+            Vector3 screenPos =
+                Camera.main.WorldToScreenPoint(
+                    nearbyWeapon.transform.position + Vector3.up * 2f
+                );
+
+            currentPrompt.transform.position = screenPos;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Weapon"))
+        if (!other.CompareTag("Weapon")) return;
+
+        nearbyWeapon = other.GetComponent<WeaponPickup>();
+
+        if (nearbyWeapon != null && currentPrompt == null)
         {
-            nearbyWeapon = other.GetComponent<WeaponPickup>();
+            currentPrompt = Instantiate(
+                interactPromptPrefab,
+                uiCanvas
+            );
+
+            Vector3 screenPos =
+                Camera.main.WorldToScreenPoint(
+                    nearbyWeapon.transform.position + Vector3.up * 2f
+                );
+
+            currentPrompt.transform.position = screenPos;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Weapon"))
+        if (!other.CompareTag("Weapon")) return;
+
+        WeaponPickup pickup = other.GetComponent<WeaponPickup>();
+
+        if (pickup == nearbyWeapon)
         {
             nearbyWeapon = null;
+        }
+
+        if (currentPrompt != null)
+        {
+            Destroy(currentPrompt);
+            currentPrompt = null;
         }
     }
 
     public void WeaponPickUp()
     {
         if (nearbyWeapon != null &&
+            playerState.CanInteract &&
             (Input.GetKeyDown(KeyCode.E)
-             || inputHandler.interactPressed))
+            || inputHandler.interactPressed))
         {
-            // 先尝试加入背包
             bool success =
                 WeaponAdd(nearbyWeapon.weaponData);
 
             if (success)
             {
-                // 再生成武器
                 weaponSystem.AddWeapon(
-                    nearbyWeapon.weaponData);
+                    nearbyWeapon.weaponData
+                );
 
-                // 最后再标记已拾取
                 nearbyWeapon.isPickedUp = true;
 
                 nearbyWeapon.gameObject.SetActive(false);
+
+                // 🔥 UI 一起消失
+                if (currentPrompt != null)
+                {
+                    Destroy(currentPrompt);
+                    currentPrompt = null;
+                }
 
                 nearbyWeapon = null;
             }
@@ -77,7 +126,6 @@ public class WeaponBackPack : BackPack,ISaveable
         }
 
         Weapons.Add(data);
-
         return true;
     }
 
@@ -112,11 +160,11 @@ public class WeaponBackPack : BackPack,ISaveable
         {
             if (WeaponDatabase.dict.ContainsKey(id))
             {
-                WeaponData data = WeaponDatabase.dict[id];
+                WeaponData data =
+                    WeaponDatabase.dict[id];
 
                 Weapons.Add(data);
 
-                // 恢复 WeaponSystem
                 weaponSystem.AddWeapon(data);
             }
             else
@@ -125,6 +173,4 @@ public class WeaponBackPack : BackPack,ISaveable
             }
         }
     }
-
-    
 }

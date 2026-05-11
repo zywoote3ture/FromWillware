@@ -67,7 +67,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Attack()
     {
-        if ((Input.GetKeyDown(KeyCode.J)||inputHandler.attackPressed)&&playerState.CanAttack)
+        if ((inputHandler.attackPressed)&&playerState.CanAttack)
         {
            
             if (IsAttacking)

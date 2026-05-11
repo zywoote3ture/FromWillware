@@ -12,10 +12,12 @@ public class PlayerState : MonoBehaviour
     private GetHit hitState;
 
     public bool CanMove;
+    public bool CanRoll;
     public bool CanAttack;
     public bool CanParry;
     public bool CanGetHit;
     public bool CanRecoverStamina;
+    public bool CanInteract;
     
     void Start()
     {
@@ -30,25 +32,34 @@ public class PlayerState : MonoBehaviour
     void Update()
     {
         SetCanMove();
+        SetCanRoll();
         SetCanAttack();
         SetCanParry();
         SetCanGetHit();
         SetCanRecoverStamina();
+        SetCanInteract();
     }
 
     void SetCanMove()
     {
-        CanMove = !playerMove.IsRolling && !playerAttack.IsAttacking && !playerParry.IsDefensing && !hitState.IsGetHit;
+        CanMove = !player.IsInventoryOn&&!playerMove.IsRolling && !playerAttack.IsAttacking && !playerParry.IsDefensing && !hitState.IsGetHit;
+    }
+
+    void SetCanRoll()
+    {
+        CanRoll = !player.IsInventoryOn&&!playerAttack.IsAttacking && !playerParry.IsDefensing && !hitState.IsGetHit && !player.StaminaEmpty &&
+                  playerMove.NextRolling;
     }
 
     void SetCanAttack()
     {
-        CanAttack = !playerMove.IsRolling && !player.StaminaEmpty && !playerParry.IsDefensing && !hitState.IsGetHit;
+        CanAttack = !player.IsInventoryOn&&!playerMove.IsRolling && !player.StaminaEmpty && !playerParry.IsDefensing && !hitState.IsGetHit;
     }
 
     void SetCanParry()
     {
-        CanParry = !hitState.IsGetHit && !playerMove.IsRolling && !playerAttack.IsAttacking;
+        CanParry = !player.IsInventoryOn&&!hitState.IsGetHit && !playerMove.IsRolling && !playerAttack.IsAttacking && !player.IsDead;
+        //CanParry = !hitState.IsGetHit && !playerMove.IsRolling;
     }
 
     void SetCanGetHit()
@@ -58,6 +69,11 @@ public class PlayerState : MonoBehaviour
 
     void SetCanRecoverStamina()
     {
-        CanRecoverStamina = !playerAttack.IsAttacking && !playerMove.IsRolling;
+        CanRecoverStamina = !playerAttack.IsAttacking && !playerMove.IsRolling && !playerParry.IsDefensing;
+    }
+
+    void SetCanInteract()
+    {
+        CanInteract = !player.IsInventoryOn&&!hitState.IsGetHit;
     }
 }

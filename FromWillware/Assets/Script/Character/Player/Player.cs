@@ -8,7 +8,7 @@ public class Player : Character,ISaveable
     public float CurrentStamina;
     public float StaminaRecoverRate;
     public bool StaminaEmpty;
-    
+    public bool IsInventoryOn = false;
 
     private Animator animator;
     private PlayerState playerState;
@@ -57,8 +57,17 @@ public class Player : Character,ISaveable
 
         IsDead = true;
 
+        animator.SetBool("IsDefensing", false);
+
+        animator.ResetTrigger("GetHit");
+        animator.ResetTrigger("Roll");
+        animator.ResetTrigger("Attack");
+        animator.ResetTrigger("Parry");
+
+        // 强制切死亡动画
+        animator.CrossFade("Death", 0.01f);
         // 1. 播放死亡动画
-        animator.SetTrigger("Die");
+        //animator.SetTrigger("Die");
 
         // 2. 禁用移动、攻击、防御脚本
         var move = GetComponent<PlayerMove>();
@@ -77,7 +86,8 @@ public class Player : Character,ISaveable
             rb.velocity = Vector3.zero;
             rb.isKinematic = true; // 阻止物理干扰
         }
-
+        
+       
         // 4. 可选：锁定相机（视角不跟随）
         // var camFollow = Camera.main.GetComponent<CameraFollow>();
         // if (camFollow != null) camFollow.enabled = false;

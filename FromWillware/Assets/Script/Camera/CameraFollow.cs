@@ -56,7 +56,7 @@ public class CameraFollow : MonoBehaviour
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -30f, 60f);
         }
-        if (Input.GetKeyDown(KeyCode.T))
+        if (inputHandler.resetCamera)
         {
             StartCoroutine(SmoothReset());
         }
