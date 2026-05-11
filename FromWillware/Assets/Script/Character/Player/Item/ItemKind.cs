@@ -1,4 +1,5 @@
 public enum ItemKind
 {
-    Consumable
+    Consumable,
+    Plot
 };

@@ -72,7 +72,8 @@ public class ItemBar : MonoBehaviour
         stack.item.Fun(player);
 
         // 2. 数量减少
-        stack.CurrentCount--;
+        if(stack.item.Kind!=ItemKind.Plot)
+            stack.CurrentCount--;
         
         // ==========================================
         // ⭐ 新增核心逻辑：如果物品用光了（数量 <= 0），彻底清理数据！
