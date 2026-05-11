@@ -15,12 +15,16 @@ public class Enemy : Character
     [Header("战斗参数")]
     public float attackRange = 2.0f;
     public float attackCooldown = 2.0f;
-    public float activationRange = 8.0f; 
+    public float activationRange = 8.0f;
 
     private bool isActivated = false;
-    public bool isDead = false;
-
+    public bool isDead = false; 
     public int expReward = 50;
+
+    [Header("远程设置")]
+    public GameObject projectilePrefab;
+    public Transform handTransform; 
+    private GameObject currentArrow;
 
     private float lastAttackTime = -999f;
 
@@ -77,15 +81,15 @@ public class Enemy : Character
         // 防止鞭尸
         if (targetPlayerScript != null && targetPlayerScript.IsDead == true)
         {
-            agent.isStopped = true;             
-            anim.SetBool("isWalking", false);    
-            anim.ResetTrigger("DoAttack");      
-            return;                              
+            agent.isStopped = true;
+            anim.SetBool("isWalking", false);
+            anim.ResetTrigger("DoAttack");
+            return;
         }
 
         // 硬直检测
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-     
+
         if (stateInfo.IsName("Attack") || stateInfo.IsName("Hit") || stateInfo.IsName("BreakDefense"))
         {
             agent.isStopped = true;
@@ -113,7 +117,7 @@ public class Enemy : Character
             {
                 lastAttackTime = Time.time;
                 anim.SetTrigger("DoAttack");
-               
+
             }
         }
     }
@@ -122,7 +126,7 @@ public class Enemy : Character
     // 重写基类死亡方法
     public override void Die()
     {
-        base.Die(); 
+        base.Die();
 
         isDead = true;
         anim.SetTrigger("DoDeath");
@@ -154,5 +158,53 @@ public class Enemy : Character
     public void DisableWeaponHitboxEvent()
     {
         if (enemyWeapon != null) enemyWeapon.DisableWeapon();
+    }
+
+    // 根运动控制:0 为关闭，1 为开启
+    public void SetRootMotion(int enabled)
+    {
+        anim.applyRootMotion = (enabled == 1);
+    }
+
+    public void CreateArrowEvent()
+    {
+        if (projectilePrefab != null && handTransform != null)
+        {
+            if (currentArrow != null) Destroy(currentArrow);
+
+            currentArrow = Instantiate(projectilePrefab, handTransform.position, handTransform.rotation);
+            currentArrow.transform.SetParent(handTransform);
+
+            currentArrow.transform.localPosition = Vector3.zero;
+            currentArrow.transform.localRotation = Quaternion.identity;
+
+            currentArrow.tag = "EnemyAttack";
+           
+        }
+    }
+
+    public void ClearHeldArrow()
+    {
+        if (currentArrow != null)
+        {
+            Destroy(currentArrow);
+            currentArrow = null;
+        }
+    }
+
+    public void FireProjectileEvent()
+    {
+        if (currentArrow != null)
+        {
+            Arrow arrowScript = currentArrow.GetComponent<Arrow>();
+            if (arrowScript != null)
+            {
+                // 获取目标点：玩家的坐标 + 一个高度偏移
+                Vector3 targetPos = playerTarget.position + Vector3.up * 1f;
+
+                arrowScript.Launch(targetPos);
+            }
+            currentArrow = null;
+        }
     }
 }
