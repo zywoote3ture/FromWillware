@@ -49,6 +49,10 @@ public class GetHit : MonoBehaviour
             return;
 
         player.CurrentHP -= damage;
+        if (GamepadVibration.Instance != null)
+        {
+            GamepadVibration.Instance.Vibrate(0.4f, 0.8f, 0.15f);
+        }
 
         if (player.CurrentHP <= 0)
         {

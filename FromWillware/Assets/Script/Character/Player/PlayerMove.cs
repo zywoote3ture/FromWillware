@@ -143,7 +143,7 @@ public class PlayerMove : MonoBehaviour
     
     void UpdateMoveAudio()
     {
-        bool moving = inputDir.magnitude > 0.1f;
+        bool moving = (inputDir.magnitude > 0.1f);
 
         MoveAudioState targetState = MoveAudioState.None;
 
@@ -246,6 +246,10 @@ public class PlayerMove : MonoBehaviour
         {
             player.ConsumeStamina(RollStamina);
             animator.SetTrigger("Roll");
+            if (GamepadVibration.Instance != null)
+            {
+                GamepadVibration.Instance.Vibrate(0.15f, 0.35f, 0.12f);
+            }
         }
         else
         {
@@ -258,8 +262,13 @@ public class PlayerMove : MonoBehaviour
     public void SetIsRolling()
     {
         IsRolling = true;
-        //rb.velocity = Vector3.zero;
-        
+
+        // 立刻停止脚步声
+        audioSource.Stop();
+
+        currentAudioState = MoveAudioState.None;
+
+        targetVolume = 0f;
     }
 
     public void ResetIsRolling()
