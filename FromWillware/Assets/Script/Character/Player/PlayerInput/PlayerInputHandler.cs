@@ -47,16 +47,17 @@ public class PlayerInputHandler : MonoBehaviour
         input = new PlayerInputActions();
     }
 
+    private bool weaponSwitchConsumed;
     void OnEnable()
     {
         input.Enable();
 
-        input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        input.Player.Move.performed += OnMove;
+        input.Player.Move.canceled += OnMoveCancel;
 
-        input.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-        input.Player.Look.canceled += ctx => lookInput = Vector2.zero;
-
+        input.Player.Look.performed += OnLook;
+        input.Player.Look.canceled += OnLookCancel;
+        
         input.Player.Attack.performed += ctx => attackPressed = true;
         input.Player.Roll.performed += ctx => rollPressed = true;
         input.Player.Interact.performed += ctx => interactPressed = true;
@@ -101,7 +102,13 @@ public class PlayerInputHandler : MonoBehaviour
             switchAxisInUse = false;
         };
         
-        input.Player.WeaponSwitch.performed += ctx => switchWeapon = true;
+        input.Player.WeaponSwitch.performed += ctx =>
+        {
+            if (weaponSwitchConsumed) return;
+
+            switchWeapon = true;
+            weaponSwitchConsumed = true;
+        };
         
         input.Player.ResetCamera.performed += ctx => resetCamera = true;
         
@@ -135,7 +142,9 @@ public class PlayerInputHandler : MonoBehaviour
         parryReleased = false;
 
         runningPressed = false;
+        
         switchWeapon = false;
+        weaponSwitchConsumed = false;
 
         resetCamera = false;
         
@@ -159,5 +168,25 @@ public class PlayerInputHandler : MonoBehaviour
     public void ConsumeSwitchTarget()
     {
         switchTargetDirection = 0;
+    }
+    
+    void OnMove(InputAction.CallbackContext ctx)
+    {
+        moveInput = ctx.ReadValue<Vector2>();
+    }
+
+    void OnMoveCancel(InputAction.CallbackContext ctx)
+    {
+        moveInput = Vector2.zero;
+    }
+
+    void OnLook(InputAction.CallbackContext ctx)
+    {
+        lookInput = ctx.ReadValue<Vector2>();
+    }
+
+    void OnLookCancel(InputAction.CallbackContext ctx)
+    {
+        lookInput = Vector2.zero;
     }
 }

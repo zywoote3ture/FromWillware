@@ -13,7 +13,26 @@ public class PlayerMove : MonoBehaviour
     public float RollStamina;
     public bool IsRunning = false;
     public AudioClip MoveAudio;
+    public AudioClip RunningAudio;
     public AudioSource audioSource;
+    
+    public float footstepInterval = 0.35f;
+    [Header("Audio Fade")]
+    public float fadeSpeed = 5f;
+    private float targetVolume = 0f;
+    
+    private float lastFootstepTime;
+    
+    private bool isRunningAudioPlaying;
+    
+    private enum MoveAudioState
+    {
+        None,
+        Walk,
+        Run
+    }
+
+    private MoveAudioState currentAudioState = MoveAudioState.None;
     
     [SerializeField]
     private Rigidbody rb;
@@ -25,6 +44,8 @@ public class PlayerMove : MonoBehaviour
     private GetHit hitState;
     private PlayerState playerState;
     private PlayerInputHandler inputHandler;
+    
+    
     
     // Start is called before the first frame update
     void Start()
@@ -55,8 +76,10 @@ public class PlayerMove : MonoBehaviour
         }
         if (playerState.CanMove)
         {
-            inputDir.x = Input.GetAxis("Horizontal");
-            inputDir.y = Input.GetAxis("Vertical");
+            // inputDir.x = Input.GetAxis("Horizontal");
+            // inputDir.y = Input.GetAxis("Vertical");
+            inputDir.x = inputHandler.moveInput.x;
+            inputDir.y = inputHandler.moveInput.y;
         }
         else
         {
@@ -64,6 +87,7 @@ public class PlayerMove : MonoBehaviour
         }
         Move();
         Roll();
+        UpdateAudioFade(); 
     }
 
     void Move()
@@ -113,17 +137,106 @@ public class PlayerMove : MonoBehaviour
         {
             transform.forward = move;
         }
-        
+       UpdateMoveAudio();
     }
-    public void PlayFootstep()
+    
+    
+    void UpdateMoveAudio()
     {
-        Vector3 horizontalVelocity =
-            new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        bool moving = inputDir.magnitude > 0.1f;
 
-        if (horizontalVelocity.magnitude < 0.5f)
+        MoveAudioState targetState = MoveAudioState.None;
+
+        if (!moving)
+            targetState = MoveAudioState.None;
+        else if (IsRunning)
+            targetState = MoveAudioState.Run;
+        else
+            targetState = MoveAudioState.Walk;
+
+        if (targetState == currentAudioState)
             return;
 
-        //audioSource.PlayOneShot(MoveAudio);
+        switch (targetState)
+        {
+            case MoveAudioState.None:
+                targetVolume = 0f;
+                break;
+
+            case MoveAudioState.Walk:
+                audioSource.clip = MoveAudio;
+                audioSource.loop = true;
+                audioSource.Play();
+                targetVolume = 1f;
+                break;
+
+            case MoveAudioState.Run:
+                audioSource.clip = RunningAudio;
+                audioSource.loop = true;
+                audioSource.Play();
+                targetVolume = 1f;
+                break;
+        }
+
+        currentAudioState = targetState;
+        
+    }
+    void UpdateAudioFade()
+    {
+        // 🔥 没移动时强制目标音量为0
+        if (inputDir.magnitude <= 0.1f)
+            targetVolume = 0f;
+
+        audioSource.volume = Mathf.Lerp(
+            audioSource.volume,
+            targetVolume,
+            Time.deltaTime * fadeSpeed
+        );
+
+        // 🔇 防止残留小声音
+        if (targetVolume == 0f && audioSource.volume < 0.01f)
+        {
+            audioSource.volume = 0f;
+            audioSource.Stop();
+            currentAudioState = MoveAudioState.None;
+        }
+    }
+    
+    public void PlayFootstep()
+    {
+        // if (Time.time - lastFootstepTime < footstepInterval)
+        //     return;
+        //
+        // Vector3 horizontalVelocity =
+        //     new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        //
+        // if (horizontalVelocity.magnitude < 0.5f)
+        //     return;
+        //
+        // if (!IsRunning)
+        // {
+        //     audioSource.PlayOneShot(MoveAudio);
+        // }
+        //
+        // lastFootstepTime = Time.time;
+    }
+    
+    public void StartRunAudio()
+    {
+        if (audioSource.clip == RunningAudio && audioSource.isPlaying)
+            return;
+
+        audioSource.clip = RunningAudio;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+    
+    public void StopRunAudio()
+    {
+        if (audioSource.clip == RunningAudio)
+        {
+            audioSource.Stop();
+        }
     }
 
     public void Roll()
