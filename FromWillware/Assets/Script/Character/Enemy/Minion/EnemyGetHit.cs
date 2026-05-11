@@ -16,7 +16,9 @@ public class EnemyGetHit : MonoBehaviour
     // 处理扣血和受伤动画
     public void TakeDamage(int damageAmount)
     {
-        if (enemy.CurrentHP <= 0) return; 
+        if (enemy.CurrentHP <= 0) return;
+
+        enemy.ClearHeldArrow();
 
         enemy.CurrentHP -= damageAmount;
         anim.SetTrigger("DoHit");
