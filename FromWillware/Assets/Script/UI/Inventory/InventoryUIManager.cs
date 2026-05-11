@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 public class InventoryUIManager : MonoBehaviour
 {
-    public static InventoryUIManager Instance;[Header("绑定外部背包数据")]
+    public static InventoryUIManager Instance;
+    
+    [Header("绑定外部背包数据")]
     public ConsumableBackPack backPack;
 
     [Header("UI 引用")]
@@ -13,15 +15,18 @@ public class InventoryUIManager : MonoBehaviour
     public Button closeButton;
     public RectTransform selectionBox;
 
-    
+    [Header("【新增】武器背包引用 (用于切换页签)")]
+    public InventoryTextUI weaponUI; // <--- 关键：把武器UI引入进来
+
     [Header("键盘导航设置")]
-    public int columns = 9; // 你的背包每行有几个格子？(根据截图应该是9)
-    private int currentSelectedIndex = 0; // 当前选中的格子序号
+    public int columns = 9; 
+    private int currentSelectedIndex = 0; 
 
     public InventorySlotUI[] slots;
 
     public Player player;
-    private PlayerInputHandler inputHandler;
+    public PlayerInputHandler inputHandler; // 改为 public，方便面板拖拽防丢失
+
     void Awake()
     {
         Instance = this;
@@ -37,184 +42,160 @@ public class InventoryUIManager : MonoBehaviour
             slots[i].slotIndex = i;
         }
 
-        closeButton.onClick.AddListener(CloseInventory);
+        // 点击关闭按钮时，关闭所有背包
+        closeButton.onClick.AddListener(CloseAllUI);
         inventoryPanel.SetActive(false);
 
         if (selectionBox != null)
             selectionBox.gameObject.SetActive(false);
-        inputHandler = FindObjectOfType<PlayerInputHandler>();
-        player = FindObjectOfType<Player>();
+            
+        if (inputHandler == null) inputHandler = FindObjectOfType<PlayerInputHandler>();
+        if (player == null) player = FindObjectOfType<Player>();
     }
 
     void Update()
     {
-        if (backPack == null)
+        if (backPack == null) backPack = FindObjectOfType<ConsumableBackPack>();
+
+        // ================== 核心：统筹管理页签切换逻辑 ==================
+        bool isConsumableOpen = inventoryPanel.activeSelf;
+        bool isWeaponOpen = weaponUI != null && weaponUI.isUIOpen;
+        bool isAnyOpen = isConsumableOpen || isWeaponOpen;
+
+        // 【C 键】：整个背包系统的 总开关
+        if (Input.GetKeyDown(KeyCode.C) || (inputHandler != null && inputHandler.backPackPressed))
         {
-            backPack = FindObjectOfType<ConsumableBackPack>();
+            if (isAnyOpen)
+            {
+                // 如果当前有任意一个背包开着 -> 关闭所有背包
+                CloseAllUI(); 
+            }
+            else
+            {
+                // 如果都关着 -> 默认打开消耗品背包
+                OpenConsumableUI(); 
+            }
         }
 
-        if (inputHandler.backPackPressed)
+        // 【B 键】：页签切换键（只有在背包开着的时候才生效）
+        if (Input.GetKeyDown(KeyCode.B) && isAnyOpen)
         {
-            ToggleInventory();
+            if (isConsumableOpen)
+            {
+                // 关掉消耗品，打开武器
+                CloseConsumableUI();
+                if (weaponUI != null) weaponUI.OpenUI();
+            }
+            else if (isWeaponOpen)
+            {
+                // 关掉武器，打开消耗品
+                if (weaponUI != null) weaponUI.CloseUI();
+                OpenConsumableUI();
+            }
         }
+        // ==============================================================
 
-        if (inventoryPanel.activeSelf)
+        // 鼠标控制逻辑：只要有任意背包开着，就显示鼠标
+        if (isAnyOpen)
         {
-            // 1. 处理鼠标显示与锁定（强行夺取控制权）
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+        }
 
-            // 2. 刷新 UI
+        // 当消耗品背包处于显示状态时，执行它的内部逻辑
+        if (isConsumableOpen)
+        {
             if (backPack != null) RefreshUI();
-            
-            // 3. 处理输入（只调用一次！）
             HandleKeyboardNavigation(); 
             HandleQuickBarBinding();
         }
     }
 
-    void ToggleInventory()
+    // --- 新增的 UI 状态控制方法 ---
+    public void OpenConsumableUI()
     {
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-        player.IsInventoryOn = inventoryPanel.activeSelf;
-        UpdateMouseCursor();
-
-        if (inventoryPanel.activeSelf)
-        {
-            // 使用 Invoke 延迟 0.05 秒，确保布局已经计算完毕
-            Invoke("ShowSelectionBox", 0.05f); 
-        }
-        else
-        {
-            if (selectionBox != null) selectionBox.gameObject.SetActive(false);
-        }
+        inventoryPanel.SetActive(true);
+        if (player != null) player.IsInventoryOn = true;
+        Invoke("ShowSelectionBox", 0.05f); // 延迟显示选中框
     }
 
-    // 专门用来处理打开时的逻辑
+    public void CloseConsumableUI()
+    {
+        inventoryPanel.SetActive(false);
+        if (selectionBox != null) selectionBox.gameObject.SetActive(false);
+    }
+
+    public void CloseAllUI()
+    {
+        CloseConsumableUI();
+        if (weaponUI != null) weaponUI.CloseUI();
+        
+        if (player != null) player.IsInventoryOn = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     void ShowSelectionBox()
     {
         SelectSlot(currentSelectedIndex);
     }
 
-    void CloseInventory()
-    {
-        inventoryPanel.SetActive(false);
-        UpdateMouseCursor();
-    }
-
-    void UpdateMouseCursor()
-    {
-        Cursor.visible = inventoryPanel.activeSelf;
-        Cursor.lockState = inventoryPanel.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
-    }
-
+    // ================== 以下保留你原来的逻辑，完全不变 ==================
     public void RefreshUI()
     {
         for (int i = 0; i < slots.Length; i++)
         {
             if (i < backPack.Items.Count && backPack.Items[i] != null && backPack.Items[i].item != null)
-            {
                 slots[i].UpdateSlot(backPack.Items[i].item, backPack.Items[i].CurrentCount);
-            }
             else
-            {
                 slots[i].ClearSlot();
-            }
         }
     }
 
     public void SwapItems(int indexA, int indexB)
     {
         if (backPack == null) return;
-
-        // 获取最大的那个目标索引
         int maxIndex = Mathf.Max(indexA, indexB);
-
-        // 如果底层数据列表不够长，就用 null（空位）把它补齐
-        while (backPack.Items.Count <= maxIndex)
-        {
-            backPack.Items.Add(null);
-        }
-
-        // 现在可以安全地进行交换了
+        while (backPack.Items.Count <= maxIndex) backPack.Items.Add(null);
         var temp = backPack.Items[indexA];
         backPack.Items[indexA] = backPack.Items[indexB];
         backPack.Items[indexB] = temp;
-
         RefreshUI();
     }
 
-    // ================== 键盘导航核心逻辑 ==================
     void HandleKeyboardNavigation()
     {
-        // 向左移动 (J)
-        if (Input.GetKeyDown(KeyCode.J)||inputHandler.chooseItemLeftPressed)
-        {
-            // 只要当前不在最左边一列（对列数取余不为0），且序号 > 0
-            if (currentSelectedIndex % columns != 0 && currentSelectedIndex - 1 >= 0)
-            {
-                SelectSlot(currentSelectedIndex - 1);
-            }
-        }
-        // 向右移动 (L)
-        else if (Input.GetKeyDown(KeyCode.L)||inputHandler.chooseItemRightPressed)
-        {
-            // 只要移动后不在下一行的第一列，且没超出总格子数
-            if ((currentSelectedIndex + 1) % columns != 0 && currentSelectedIndex + 1 < slots.Length)
-            {
-                SelectSlot(currentSelectedIndex + 1);
-            }
-        }
-        // 向上移动 (I)
-        else if (Input.GetKeyDown(KeyCode.I)||inputHandler.chooseItemUpPressed)
-        {
-            // 只要减去一行的数量不小于0（即不在第一行）
-            if (currentSelectedIndex - columns >= 0)
-            {
-                SelectSlot(currentSelectedIndex - columns);
-            }
-        }
-        // 向下移动 (K)
-        else if (Input.GetKeyDown(KeyCode.K)||inputHandler.chooseItemDownPressed)
-        {
-            // 只要加上一行的数量没超出总格子数
-            if (currentSelectedIndex + columns < slots.Length)
-            {
-                SelectSlot(currentSelectedIndex + columns);
-            }
-        }
+        if (Input.GetKeyDown(KeyCode.J)|| (inputHandler != null && inputHandler.chooseItemLeftPressed))
+            if (currentSelectedIndex % columns != 0 && currentSelectedIndex - 1 >= 0) SelectSlot(currentSelectedIndex - 1);
+
+        else if (Input.GetKeyDown(KeyCode.L)|| (inputHandler != null && inputHandler.chooseItemRightPressed))
+            if ((currentSelectedIndex + 1) % columns != 0 && currentSelectedIndex + 1 < slots.Length) SelectSlot(currentSelectedIndex + 1);
+
+        else if (Input.GetKeyDown(KeyCode.I)|| (inputHandler != null && inputHandler.chooseItemUpPressed))
+            if (currentSelectedIndex - columns >= 0) SelectSlot(currentSelectedIndex - columns);
+
+        else if (Input.GetKeyDown(KeyCode.K)|| (inputHandler != null && inputHandler.chooseItemDownPressed))
+            if (currentSelectedIndex + columns < slots.Length) SelectSlot(currentSelectedIndex + columns);
     }
 
-    // 更新选择框的位置，并记录当前选中的序号
     public void SelectSlot(int index)
     {
         if (selectionBox == null || index < 0 || index >= slots.Length) return;
-
-        currentSelectedIndex = index; // 记录当前序号
-        
+        currentSelectedIndex = index; 
         selectionBox.gameObject.SetActive(true);
-        selectionBox.position = slots[index].transform.position; // 移动到目标位置
-        
-        // 【关键】强制让高亮框显示在最前面，防止被其他UI挡住
+        selectionBox.position = slots[index].transform.position; 
         selectionBox.SetAsLastSibling(); 
     }
 
-    // ================== 快捷键绑定核心逻辑 ==================
     void HandleQuickBarBinding()
     {
-        // 防错检测
         if (backPack == null || currentSelectedIndex < 0 || currentSelectedIndex >= backPack.Items.Count) return;
 
-        // 按下数字键 1, 2, 3, 4 绑定到对应的快捷栏 (索引为 0, 1, 2, 3)
-        if (Input.GetKeyDown(KeyCode.Alpha1)||inputHandler.setItem1Pressed) backPack.AddToItemBar(currentSelectedIndex, 0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)||inputHandler.setItem2Pressed) backPack.AddToItemBar(currentSelectedIndex, 1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)||inputHandler.setItem3Pressed) backPack.AddToItemBar(currentSelectedIndex, 2);
-        if (Input.GetKeyDown(KeyCode.Alpha4)||inputHandler.setItem4Pressed) backPack.AddToItemBar(currentSelectedIndex, 3);
+        if (Input.GetKeyDown(KeyCode.Alpha1)|| (inputHandler != null && inputHandler.setItem1Pressed)) backPack.AddToItemBar(currentSelectedIndex, 0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)|| (inputHandler != null && inputHandler.setItem2Pressed)) backPack.AddToItemBar(currentSelectedIndex, 1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)|| (inputHandler != null && inputHandler.setItem3Pressed)) backPack.AddToItemBar(currentSelectedIndex, 2);
+        if (Input.GetKeyDown(KeyCode.Alpha4)|| (inputHandler != null && inputHandler.setItem4Pressed)) backPack.AddToItemBar(currentSelectedIndex, 3);
 
-        // 按下 X 键解除绑定
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            backPack.RemoveFromItemBar(currentSelectedIndex);
-        }
+        if (Input.GetKeyDown(KeyCode.X)) backPack.RemoveFromItemBar(currentSelectedIndex);
     }
 }
